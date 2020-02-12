@@ -1,17 +1,13 @@
 
-
-function base10(lista){
-    soma = 0
-    for(i=0; i< lista.length; i++){
-        if(lista[i]) soma += 2**i 
-    }
-    return soma
-}
-
 function real(lista, sup, inf){
-    return inf+((sup-inf)/(2**lista.length - 1 ))*base10(lista)
+    baseDez = 0
+    for(i=0; i< lista.length; i++){
+        if(lista[i]) baseDez += 2**i 
+    }
+    return inf+((sup-inf)/(2**lista.length - 1 ))*baseDez
 }
 
-function populacaoInicial(){
-    
-}
+//gera populacao inicial
+individuos = 10
+for(i=0; i<individuos; i++)
+Math.round(Math.random())
