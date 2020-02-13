@@ -22,3 +22,10 @@ function populacaoInicial(individuals = 10, genes = 8) {
 add = ``
 populacao = populacaoInicial()
 console.log(populacao)
+/*
+for (i = 0; i < populacao.length; i++) {
+  console.log(populacao[i])
+  add += `${populacao[i]} -> <br/>`
+}
+
+document.getElementById("log").innerHTML = add
