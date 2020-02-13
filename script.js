@@ -7,7 +7,7 @@ function converteReal(lista, sup = 100, inf = 0) {
 }
 
 //gera populacao inicial
-function populacaoInicial(individuals = 10, genes = 8) {
+function initialPopulation(individuals = 10, genes = 8) {
   population = []
   for (i = 0; i < 10; i++) {
     cromossome = []
@@ -19,13 +19,18 @@ function populacaoInicial(individuals = 10, genes = 8) {
   return population
 }
 
+population = initialPopulation()
+
+function fitness(cromossome) {
+  
+  a = 21,5 + (x1 * Math.sin(4*Math.PI*x1)) + (x2 * Math.sin(20*Math.PI*x2))
+
+}
+
 add = ``
-populacao = populacaoInicial()
-console.log(populacao)
-/*
-for (i = 0; i < populacao.length; i++) {
-  console.log(populacao[i])
-  add += `${populacao[i]} -> <br/>`
+
+for (k = 0; k < population.length; k++) {
+  add += `${converteReal(population[k]).toFixed(2)} -> ${population[k]}<br/>`
 }
 
 document.getElementById("log").innerHTML = add
