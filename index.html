@@ -7,6 +7,19 @@
     <title>Exercicios IA</title>
   </head>
   <body>
+    <div class="form">
+      <input type="number" name="tamanhoC" id="tamanhoC" value="8" placeholder="tamanho do cromossomo">
+      <input type="number" name="tamanhoPop" id="tamanhoPop" value="10" placeholder="tamanho da população">
+      <input type="number" name="probCruzamento" id="probCruzamento" value="0.5" placeholder="probabilidade de cruzamento">
+      <input type="number" name="probMutacao" id="probMutacao" value="0" placeholder="probabilidade de Mutação">
+      <input type="number" name="qtGeracoes" id="qtGeracoes" value="1" placeholder="Quantidade de gerações">
+
+      <select name="tipo" id="tipo">
+        <option value="1">Roleta</option>
+        <option value="2">Torneio</option>
+      </select>
+      <button onclick="botaoClicado()">Go!</button>
+    </div>
     <div id="log"></div>
     <script src="script.js"></script>
   </body>
