@@ -1,0 +1,9 @@
+.form {
+  display: flex;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}

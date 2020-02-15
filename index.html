@@ -5,22 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Exercicios IA</title>
+
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="form">
-      <input type="number" name="tamanhoC" id="tamanhoC" value="8" placeholder="tamanho do cromossomo">
-      <input type="number" name="tamanhoPop" id="tamanhoPop" value="10" placeholder="tamanho da população">
-      <input type="number" name="probCruzamento" id="probCruzamento" value="0.5" placeholder="probabilidade de cruzamento">
-      <input type="number" name="probMutacao" id="probMutacao" value="0" placeholder="probabilidade de Mutação">
-      <input type="number" name="qtGeracoes" id="qtGeracoes" value="1" placeholder="Quantidade de gerações">
+      <div class="campo">
+        <label for="tamanhoC">Tamanho do cromossomo:</label>
+        <input
+          type="number"
+          name="tamanhoC"
+          id="tamanhoC"
+          value="8"
+          placeholder="tamanho do cromossomo"
+        />
+      </div>
+      <div class="campo">
+        <label for="tamanhoPop">tamanho da população: </label>
+        <input
+          type="number"
+          name="tamanhoPop"
+          id="tamanhoPop"
+          value="10"
+          placeholder="tamanho da população"
+        />
+      </div>
+      <div class="campo">
+        <label for="probCruzamento">probabilidade de cruzamento</label>
+        <input
+          type="number"
+          name="probCruzamento"
+          id="probCruzamento"
+          value="0.5"
+          placeholder="probabilidade de cruzamento"
+        />
+      </div>
+      <div class="campo">
+        <label for="probMutacao">probabilidade de Mutação</label>
+        <input
+          type="number"
+          name="probMutacao"
+          id="probMutacao"
+          value="0"
+          placeholder="probabilidade de Mutação"
+        />
+      </div>
+      <div class="campo">
+        <label for="qtGeracoes">Quantidade de gerações</label>
+        <input
+          type="number"
+          name="qtGeracoes"
+          id="qtGeracoes"
+          value="1"
+          placeholder="Quantidade de gerações"
+        />
+      </div>
+      <div class="campo">
+        <select name="tipo" id="tipo">
+          <option value="1">Roleta</option>
+          <option value="2">Torneio</option>
+        </select>
+      </div>
 
-      <select name="tipo" id="tipo">
-        <option value="1">Roleta</option>
-        <option value="2">Torneio</option>
-      </select>
       <button onclick="botaoClicado()">Go!</button>
     </div>
-    <div id="log"></div>
     <script src="script.js"></script>
   </body>
 </html>
