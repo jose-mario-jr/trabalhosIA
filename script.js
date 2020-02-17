@@ -39,21 +39,23 @@ function fitness(cromossome) {
 function roulette(popOld) {
   let sumFit = 0
   let acumulatorProb = 0
+  let arrayRoleta = []
   let selected = []
 
   for (let c = 0; c < popOld.length; c++) {
     sumFit += popOld[c].fitness
   }
+
   for (let c = 0; c < popOld.length; c++) {
     popOld[c].probNow = popOld[c].fitness / sumFit
     acumulatorProb = popOld[c].probNow + acumulatorProb
-    popOld[c].probSelec = acumulatorProb
+    arrayRoleta.push(acumulatorProb)
   }
-  console.log(popOld)
+  console.log(popOld, arrayRoleta)
   for (let i = 0; i < popOld.length; i++) {
     let rand = Math.random()
     let c = 0
-    while (popOld[c].probSelec <= rand) {
+    while (arrayRoleta[c] <= rand) {
       c++
     }
     selected.push(popOld[c])
@@ -78,8 +80,13 @@ function botaoClicado() {
   for (let cont = 0; cont < qtGeracoes; cont++) {
     // seleciona melhores por roleta
     let best = roulette(population)
-    console.log(best)
     population = best
   }
-  //document.getElementById("log").innerHTML = add
+
+  var add = ""
+  for (k = 0; k < population.length; k++) {
+    console.log(population)
+    add += `${population[k].fitness} -> ${population[k].genes}<br/>`
+  }
+  document.getElementById("log").innerHTML = add
 }
