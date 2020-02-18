@@ -1,9 +1,15 @@
 .form {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .campo {
   display: flex;
   flex-direction: column;
   padding: 10px;
+}
+
+#log {
+  max-height: 450px;
+  overflow-x: scroll;
 }

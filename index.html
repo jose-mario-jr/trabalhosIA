@@ -31,44 +31,67 @@
         />
       </div>
       <div class="campo">
-        <label for="probCruzamento">probabilidade de cruzamento</label>
+        <label for="probCruzamento">Prob de cruzamento</label>
         <input
           type="number"
           name="probCruzamento"
           id="probCruzamento"
           value="0.5"
-          placeholder="probabilidade de cruzamento"
+          placeholder="Prob de cruzamento"
         />
       </div>
       <div class="campo">
-        <label for="probMutacao">probabilidade de Mutação</label>
+        <label for="probMutacao">Prob de Mutação</label>
         <input
           type="number"
           name="probMutacao"
           id="probMutacao"
-          value="0"
-          placeholder="probabilidade de Mutação"
+          value="0.1"
+          placeholder="Prob de Mutação"
         />
       </div>
       <div class="campo">
-        <label for="qtGeracoes">Quantidade de gerações</label>
+        <label for="qtGeracoes">Qt. de gerações</label>
         <input
           type="number"
           name="qtGeracoes"
           id="qtGeracoes"
           value="1"
-          placeholder="Quantidade de gerações"
+          placeholder="Qt. de gerações"
         />
       </div>
       <div class="campo">
+        <label for="tipo">Tipo de seleção</label>
+
         <select name="tipo" id="tipo">
           <option value="1">Roleta</option>
           <option value="2">Torneio</option>
         </select>
       </div>
 
-      <button onclick="botaoClicado()">Go!</button>
+      <div class="campo">
+        <label for="tamanhoTorneio">Tamanho do torneio</label>
+        <input
+          type="number"
+          name="tamanhoTorneio"
+          id="tamanhoTorneio"
+          value="4"
+          placeholder="Tamanho do torneio"
+        />
+      </div>
+
+      <div class="campo">
+        <label for="tamanhoElitismo">Tamanho do elitismo</label>
+        <input
+          type="number"
+          name="tamanhoElitismo"
+          id="tamanhoElitismo"
+          value="2"
+          placeholder="Tamanho do elitismo"
+        />
+      </div>
     </div>
+    <button onclick="botaoClicado()">Go!</button>
 
     <div id="log"></div>
     <script src="script.js"></script>
