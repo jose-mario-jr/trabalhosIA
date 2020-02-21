@@ -21,7 +21,7 @@ function populacaoInicial(individuos = 10, genes = 8) {
   return pop
 }
 
-function fitness(cromossomo) {
+function aptidao(cromossomo) {
   let pedaco1 = cromossomo.genes.slice(0, cromossomo.genes.length / 2)
   let pedaco2 = cromossomo.genes.slice(
     cromossomo.genes.length / 2,
@@ -45,37 +45,22 @@ function sorteio(arrayRoleta) {
   return c
 }
 
-function operadorCruzamento(popOld, probCruzamento) {
-  let filhos = []
-  for (let i = 0; i < popOld.length / 2; i++) {
-    sorteados = [
-      Math.floor(Math.random() * popOld.length),
-      Math.floor(Math.random() * popOld.length)
-    ]
-    while (sorteados[0] == sorteados[1])
-      sorteados[1] = Math.floor(Math.random() * popOld.length)
-    casal = [popOld[sorteados[0]], popOld[sorteados[1]]]
-    cruzaOuNao = Math.random()
-    if (cruzaOuNao < probCruzamento) {
-      pontoCruzamento = Math.round(Math.random() * casal[0].genes.length)
-      cromossomosNovos = [{ genes: [] }, { genes: [] }]
-      for (var index = 0; index < pontoCruzamento; index++) {
-        cromossomosNovos[0].genes[index] = casal[0].genes[index]
-        cromossomosNovos[1].genes[index] = casal[1].genes[index]
-      }
-      for (
-        var index = pontoCruzamento;
-        index < casal[0].genes.length;
-        index++
-      ) {
-        cromossomosNovos[1].genes[index] = casal[1].genes[index]
-        cromossomosNovos[0].genes[index] = casal[0].genes[index]
-      }
-      filhos.push(...cromossomosNovos)
-    } else {
-      // só passa para frente
-      filhos.push(...casal)
+function operadorCruzamento(casal, probCruzamento) {
+  cruzaOuNao = Math.random()
+  if (cruzaOuNao < probCruzamento) {
+    pontoCruzamento = Math.round(Math.random() * casal[0].genes.length)
+    filhos = [{ genes: [] }, { genes: [] }]
+    for (var index = 0; index < pontoCruzamento; index++) {
+      filhos[0].genes[index] = casal[0].genes[index]
+      filhos[1].genes[index] = casal[1].genes[index]
     }
+    for (var index = pontoCruzamento; index < casal[0].genes.length; index++) {
+      filhos[1].genes[index] = casal[1].genes[index]
+      filhos[0].genes[index] = casal[0].genes[index]
+    }
+  } else {
+    // só passa para frente
+    filhos = casal
   }
   return filhos
 }
@@ -101,11 +86,11 @@ function roleta(popOld, probCruzamento, probMutacao) {
   var selected = []
 
   for (let c = 0; c < popOld.length; c++) {
-    sumFit += popOld[c].fitness
+    sumFit += popOld[c].aptidao
   }
 
   for (let c = 0; c < popOld.length; c++) {
-    popOld[c].probNow = popOld[c].fitness / sumFit
+    popOld[c].probNow = popOld[c].aptidao / sumFit
     acumulatorProb = popOld[c].probNow + acumulatorProb
     arrayRoleta.push(acumulatorProb)
   }
@@ -115,24 +100,52 @@ function roleta(popOld, probCruzamento, probMutacao) {
     selected.push(popOld[pos])
   }
 
-  let filhos = operadorCruzamento(selected, probCruzamento)
+  let filhos = []
+  for (let i = 0; i < popOld.length / 2; i++) {
+    sorteados = [
+      Math.floor(Math.random() * popOld.length),
+      Math.floor(Math.random() * popOld.length)
+    ]
+    while (sorteados[0] == sorteados[1])
+      sorteados[1] = Math.floor(Math.random() * popOld.length)
+    casal = [popOld[sorteados[0]], popOld[sorteados[1]]]
+
+    filhos.push(...operadorCruzamento(casal, probCruzamento))
+  }
+
   let mutado = operadorMutacao(filhos, probMutacao)
   return mutado
 }
 
-function torneio(popOld, tamanhoTorneio) {
-  filhos = []
+function melhorCasal(individuos, lista) {
+  // observe que utilizo os itens da lista, e nao o array de populacao inteiro!
+  var maior = individuos[lista[0]],
+    segundoMaior
+  for (let i = 1; i < lista.length; i++) {
+    if (individuos[lista[i]].aptidao > maior.aptidao) {
+      segundoMaior = maior
+      maior = individuos[lista[i]]
+    }
+  }
+  console.log(maior, segundoMaior, lista)
+  return [maior, segundoMaior]
+}
+
+function torneio(popOld, tamanhoTorneio, probCruzamento) {
+  var filhos = []
   do {
     // sorteia x valores na pop
-    sorteados = []
-    for (i = 0; i < tamanhoTorneio; i++) {
-      sorteio = Math.round(Math.random() * popOld.length)
+    var sorteados = []
+    for (let i = 0; i < tamanhoTorneio; i++) {
+      var sorteio = Math.round(Math.random() * (popOld.length - 1))
       while (sorteados.includes(sorteio))
-        sorteio = Math.round(Math.random() * popOld.length)
+        sorteio = Math.round(Math.random() * (popOld.length - 1))
       sorteados.push(sorteio)
     }
-    console.log(sorteados)
-    return sorteados
+    //selecionar casal
+    var casal = melhorCasal(popOld, sorteados)
+
+    filhos.push(...operadorCruzamento(casal, probCruzamento))
   } while (filhos.length < popOld.length)
 }
 
@@ -154,7 +167,7 @@ function botaoClicado() {
   var population = populacaoInicial(tamanhoPop, tamanhoC)
   // calcula aptidao
   for (let k = 0; k < population.length; k++) {
-    population[k].fitness = parseFloat(fitness(population[k]).toFixed(2))
+    population[k].aptidao = parseFloat(aptidao(population[k]).toFixed(2))
   }
   var add = ""
 
@@ -167,7 +180,7 @@ function botaoClicado() {
     if (tipo == 2) {
       // faz torneio
       if (tamanhoTorneio < tamanhoPop) {
-        best = torneio(population, tamanhoTorneio)
+        best = torneio(population, tamanhoTorneio, probCruzamento)
         return
       } else {
         alert("torneio muito grande!")
@@ -177,14 +190,14 @@ function botaoClicado() {
 
     // calcula aptidao
     for (let k = 0; k < population.length; k++) {
-      population[k].fitness = parseFloat(fitness(population[k]).toFixed(2))
+      population[k].aptidao = parseFloat(aptidao(population[k]).toFixed(2))
     }
 
     add += `Geracao ${cont}, individuos: `
     for (k = 0; k < population.length; k++) {
       add += `
           <span title="${population[k].genes}">
-            ${population[k].fitness};   
+            ${population[k].aptidao};   
           </span>  `
     }
     add += `<br />`
@@ -192,8 +205,7 @@ function botaoClicado() {
   var arr = [];
   add += `populacao resultante: <br />`
   for (k = 0; k < population.length; k++) {
-    add += `${population[k].genes} -> ${population[k].fitness} <br/>`
-    
+    add += `${population[k].genes} -> ${population[k].aptidao} <br/>`
   }
   document.getElementById("log").innerHTML = add
   Plotly.newPlot('chart',[{
