@@ -39,18 +39,12 @@ function aptidao(cromossomo) {
   }
 }
 
-function sorteio(arrayRoleta) {
-  let rand = Math.random()
-  let c = 0
-  while (arrayRoleta[c] <= rand) {
-    c++
-  }
-  return c
-}
-
 function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
-  var filhos = [{ genes: casal[0].genes }, { genes: casal[1].genes }]
-
+  var filhos = [
+    { genes: [] }, 
+    { genes: [] }
+  ]
+  
   var cruzaOuNao = Math.random()
   if (cruzaOuNao < probCruzamento) {
     var ponto1 = Math.round(Math.random() * casal[0].genes.length)
@@ -67,20 +61,34 @@ function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
       }
     }
 
-    for (var index = ponto1; index < ponto2; index++) {
-      filhos[1].genes[index] = casal[0].genes[index]
-      filhos[0].genes[index] = casal[1].genes[index]
+    // console.log("Ocorreu Cruzamento, corte = " + ponto1)
+    for (var index = 0; index < ponto1; index++) {
+      filhos[1].genes.push(casal[1].genes[index])
+      filhos[0].genes.push(casal[0].genes[index])
     }
+    for (var index = ponto1; index < ponto2; index++) {
+      filhos[1].genes.push(casal[0].genes[index])
+      filhos[0].genes.push(casal[1].genes[index])
+    }
+    if(doisPontos){
+      for (var index = ponto2; index < casal[0].genes.length; index++) {
+        filhos[1].genes.push(casal[1].genes[index])
+        filhos[0].genes.push(casal[0].genes[index])
+      }
+    }  
+
+    return filhos
   }
-  return filhos
+  else {
+    return casal
+  }
 }
 
 function operadorMutacao(popOld, probMutacao) {
   let mutado = popOld
-  console.log(mutado)
   for (let i = 0; i < mutado.length; i++) {
     for (let j = 0; j < mutado[i].genes.length; j++) {
-      mutaOuNao = Math.random()
+      let mutaOuNao = Math.random()
       if (mutaOuNao < probMutacao) {
         mutado[i].genes[j] = Math.round(Math.random())
       }
@@ -93,37 +101,49 @@ function roleta(popOld, probCruzamento, probMutacao, elite) {
   var sumFit = 0
   var acumulatorProb = 0
   var arrayRoleta = []
-  var selected = elite
+  var selected = []
 
-  for (let c = 0; c < popOld.length; c++) {
+  var tamanhoRetorno = popOld.length - elite.length
+  for (let c = 0; c < tamanhoRetorno; c++) {
     sumFit += popOld[c].aptidao
   }
 
-  for (let c = 0; c < popOld.length; c++) {
+  for (let c = 0; c < tamanhoRetorno; c++) {
     popOld[c].probNow = popOld[c].aptidao / sumFit
     acumulatorProb = popOld[c].probNow + acumulatorProb
     arrayRoleta.push(acumulatorProb)
   }
-  for (let i = 0; i < popOld.length - elite.length; i++) {
-    let pos = sorteio(arrayRoleta)
+  for (let i = 0; i < tamanhoRetorno; i++) {  
+    let rand = Math.random()
+    let pos = 0
+    while (arrayRoleta[pos] <= rand) {
+      pos++
+    }
 
     selected.push(popOld[pos])
   }
-
   let filhos = []
-  for (let i = 0; i < popOld.length / 2; i++) {
-    sorteados = [
-      Math.floor(Math.random() * popOld.length),
-      Math.floor(Math.random() * popOld.length)
+  while(filhos.length < tamanhoRetorno) {
+    let sorteados = [
+      Math.floor(Math.random() * tamanhoRetorno),
+      Math.floor(Math.random() * tamanhoRetorno)
     ]
     while (sorteados[0] == sorteados[1])
-      sorteados[1] = Math.floor(Math.random() * popOld.length)
-    casal = [popOld[sorteados[0]], popOld[sorteados[1]]]
+      sorteados[1] = Math.floor(Math.random() * tamanhoRetorno)
 
-    filhos.push(...operadorCruzamento(casal, probCruzamento))
+    let casal = [selected[sorteados[0]], selected[sorteados[1]]]
+
+    var tam = filhos.push(...operadorCruzamento(casal, probCruzamento))
+    
+    while(tam>tamanhoRetorno) {
+      filhos.pop()
+      tam--
+    }
   }
 
   let mutado = operadorMutacao(filhos, probMutacao)
+
+  mutado.push(...elite)
   return mutado
 }
 
@@ -231,7 +251,6 @@ function botaoClicado() {
   }
   add += `<br />`
 
-  
   for (let cont = 1; cont < qtGeracoes; cont++) {
     var best = []
 
