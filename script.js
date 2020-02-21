@@ -180,7 +180,7 @@ function elitismo(popOld, tamanhoElitismo) {
         indiceMaior = j
       }
     }
-    escolhidos.push[indiceMaior]
+    escolhidos.push(indiceMaior)
     retorno.push(maior)
   }
   return retorno
@@ -201,44 +201,62 @@ function botaoClicado() {
   const tamanhoElitismo = parseInt(
     document.getElementById("tamanhoElitismo").value
   )
+
+  // validacoes
+  if (tamanhoTorneio > tamanhoPop) {
+    alert("torneio muito grande!")
+    document.getElementById("tamanhoTorneio").value = 2
+    return
+  }
+  if(tamanhoElitismo>tamanhoPop) {
+    alert("O elitismo não pode ser maior que a população!")
+    document.getElementById("tamanhoElitismo").value = 1
+    return
+  }
+
   var population = populacaoInicial(tamanhoPop, tamanhoC)
   // calcula aptidao
   for (let k = 0; k < population.length; k++) {
-    apt = aptidao(population[k])
+    var apt = aptidao(population[k])
     population[k].aptidao = parseFloat(apt.valor.toFixed(2))
     population[k].x1 = parseFloat(apt.x1)
     population[k].x2 = parseFloat(apt.x2)
   }
-  var add = ""
+  var add = `Geracao 0, individuos: `
+  for (k = 0; k < population.length; k++) {
+    add += `
+        <span title="${population[k].genes}">
+          ${population[k].aptidao};   
+        </span>  `
+  }
+  add += `<br />`
 
-  for (let cont = 0; cont < qtGeracoes; cont++) {
+  
+  for (let cont = 1; cont < qtGeracoes; cont++) {
     var best = []
 
     // elitismo nesta parte!
-    elite = elitismo(population, tamanhoElitismo)
-
+    var elite = elitismo(population, tamanhoElitismo)
+    
     if (tipo == 1) {
       // seleciona melhores por roleta
       best = roleta(population, probCruzamento, probMutacao, elite)
     }
     if (tipo == 2) {
       // faz torneio
-      if (tamanhoTorneio < tamanhoPop) {
-        best = torneio(population, tamanhoTorneio, probCruzamento, elite)
-      } else {
-        alert("torneio muito grande!")
-      }
+      best = torneio(population, tamanhoTorneio, probCruzamento, elite)
     }
     population = best
 
     // calcula aptidao
     for (let k = 0; k < population.length; k++) {
-      apt = aptidao(population[k])
+      var apt = aptidao(population[k])
       population[k].aptidao = parseFloat(apt.valor.toFixed(2))
       population[k].x1 = parseFloat(apt.x1)
       population[k].x2 = parseFloat(apt.x2)
     }
 
+    // poe na view
     add += `Geracao ${cont}, individuos: `
     for (k = 0; k < population.length; k++) {
       add += `
@@ -248,18 +266,19 @@ function botaoClicado() {
     }
     add += `<br />`
   }
-  var arr = []
   add += `populacao resultante: <br />`
   for (k = 0; k < population.length; k++) {
     add += `${population[k].genes} -> ${population[k].aptidao} <br/>`
   }
   document.getElementById("log").innerHTML = add
-  dados = Plotly.newPlot("chart", [
+
+  // plota no grafico
+  /*dados = Plotly.newPlot("chart", [
     {
       z: getData(),
       type: "surface"
     }
-  ])
+  ])*/
 }
 
 function getData() {
