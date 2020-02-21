@@ -1,6 +1,10 @@
+:root {
+  --tamanho-linha: 6
+}
+
 .form {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(var(--tamanho-linha), 1fr);
 }
 
 .campo {
@@ -12,4 +16,16 @@
 #log {
   max-height: 450px;
   overflow-x: scroll;
+}
+
+@media (max-width: 1000px){
+  :root{
+    --tamanho-linha: 3;
+  }
+}
+
+@media (max-width: 700px){
+  :root{
+    --tamanho-linha: 2;
+  }
 }

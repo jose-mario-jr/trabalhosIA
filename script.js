@@ -76,7 +76,8 @@ function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
         filhos[0].genes.push(casal[0].genes[index])
       }
     }  
-
+    console.log('casal: ', casal)
+    console.log('filhos: ', filhos)
     return filhos
   }
   else {
@@ -102,7 +103,6 @@ function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
   var acumulatorProb = 0
   var arrayRoleta = []
   var selected = []
-
   var tamanhoRetorno = popOld.length - elite.length
   for (let c = 0; c < tamanhoRetorno; c++) {
     sumFit += popOld[c].aptidao
@@ -122,14 +122,15 @@ function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
 
     selected.push(popOld[pos])
   }
+
   let filhos = []
   while(filhos.length < tamanhoRetorno) {
     let sorteados = [
-      Math.floor(Math.random() * tamanhoRetorno),
-      Math.floor(Math.random() * tamanhoRetorno)
+      Math.floor(Math.random() * selected.length),
+      Math.floor(Math.random() * selected.length)
     ]
     while (sorteados[0] == sorteados[1])
-      sorteados[1] = Math.floor(Math.random() * tamanhoRetorno)
+      sorteados[1] = Math.floor(Math.random() * selected.length)
 
     let casal = [selected[sorteados[0]], selected[sorteados[1]]]
 
@@ -141,8 +142,9 @@ function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
     }
   }
 
-  let mutado = operadorMutacao(filhos, probMutacao)
-
+  return filhos
+  // let mutado = operadorMutacao(filhos, probMutacao)
+  
   mutado.push(...elite)
   return mutado
 }
@@ -265,7 +267,10 @@ function botaoClicado() {
   }
   add += `<br />`
 
+  maiorGlobal = 38.76
   var melhorIndividuo = elitismo(population, 1)[0]
+  melhorIndividuo.geracaoEncontrado = 0
+  melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
 
   for (let cont = 1; cont < qtGeracoes; cont++) {
     var best = []
@@ -277,7 +282,7 @@ function botaoClicado() {
     if(melhorAgora.aptidao > melhorIndividuo.aptidao){
       melhorIndividuo = melhorAgora
       melhorIndividuo.geracaoEncontrado = cont
-      melhorIndividuo.erro = melhorIndividuo.aptidao / 38.76
+      melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
     }
     if (tipo == 1) {
       // seleciona melhores por roleta
@@ -296,7 +301,10 @@ function botaoClicado() {
       population[k].x1 = parseFloat(apt.x1)
       population[k].x2 = parseFloat(apt.x2)
     }
-
+    
+    // plota
+    // plot(population)
+    
     // poe na view
     add += `Geracao ${cont}, individuos: `
     for (k = 0; k < population.length; k++) {
@@ -320,12 +328,26 @@ function botaoClicado() {
       type: "surface"
     }
   ])
+  
   alert(`Aptidao: ${melhorIndividuo.aptidao}, 
     x1 = ${melhorIndividuo.x1}, 
     x2 = ${melhorIndividuo.x2}, 
-    erro = ${melhorIndividuo.erro},
+    erro = ${(melhorIndividuo.erro*100).toFixed(2)}%,
     geração encontrada = ${melhorIndividuo.geracaoEncontrado}`)
 }
+
+// plota no grafico
+function plot(populacao){
+  novo = populacao
+  novo.sort((a, b) => a.x1 - b.x1)
+  console.log(populacao, novo)
+  dados = Plotly.newPlot("chart", [
+  {
+    z: getData(),
+    type: "surface"
+  }])
+}
+
 function getData() {
   var arr = []
   for (let i = 0; i < 10; i++) {
