@@ -159,11 +159,25 @@ function botaoClicado() {
       add += `<br />`
     }
   }
+  var arr = [];
   add += `populacao resultante: <br />`
   for (k = 0; k < population.length; k++) {
     add += `${population[k].genes} -> ${population[k].fitness} <br/>`
+    
   }
   document.getElementById("log").innerHTML = add
+  Plotly.newPlot('chart',[{
+    z: getData(),
+    type: 'surface'
+  }])
+}
+
+function getData(){
+  var arr = [];
+  for(let i = 0;i<10;i++){
+    arr.push(Array(10).fill().map(() => Math.random()));
+  }
+  return arr;
 }
 
 //--------------------------------------------------------
