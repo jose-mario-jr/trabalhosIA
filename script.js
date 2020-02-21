@@ -119,15 +119,21 @@ function roleta(popOld, probCruzamento, probMutacao) {
 
 function melhorCasal(individuos, lista) {
   // observe que utilizo os itens da lista, e nao o array de populacao inteiro!
-  var maior = individuos[lista[0]],
-    segundoMaior
-  for (let i = 1; i < lista.length; i++) {
+  var maior, segundoMaior
+  if (individuos[lista[0]].aptidao > individuos[lista[1]].aptidao) {
+    maior = individuos[lista[0]]
+    segundoMaior = individuos[lista[1]]
+  } else {
+    maior = individuos[lista[1]]
+    segundoMaior = individuos[lista[0]]
+  }
+  segundoMaior
+  for (let i = 2; i < lista.length; i++) {
     if (individuos[lista[i]].aptidao > maior.aptidao) {
       segundoMaior = maior
       maior = individuos[lista[i]]
     }
   }
-  console.log(maior, segundoMaior, lista)
   return [maior, segundoMaior]
 }
 
@@ -147,6 +153,7 @@ function torneio(popOld, tamanhoTorneio, probCruzamento) {
 
     filhos.push(...operadorCruzamento(casal, probCruzamento))
   } while (filhos.length < popOld.length)
+  return filhos
 }
 
 function botaoClicado() {
@@ -181,7 +188,6 @@ function botaoClicado() {
       // faz torneio
       if (tamanhoTorneio < tamanhoPop) {
         best = torneio(population, tamanhoTorneio, probCruzamento)
-        return
       } else {
         alert("torneio muito grande!")
       }
