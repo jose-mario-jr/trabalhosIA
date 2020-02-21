@@ -314,22 +314,17 @@ function botaoClicado() {
   document.getElementById("log").innerHTML = add
 
   // plota no grafico
-  /*dados = Plotly.newPlot("chart", [
+  dados = Plotly.newPlot("chart", [
     {
       z: getData(),
       type: "surface"
     }
-  ])*/
-  if(melhorIndividuo.aptidao>38.77){
-    alert(`Aptidao: ${melhorIndividuo.aptidao}, 
-      x1 = ${melhorIndividuo.x1}, 
-      x2 = ${melhorIndividuo.x2}, 
-      erro = ${melhorIndividuo.erro},
-      geração encontrada = ${melhorIndividuo.geracaoEncontrado}`)
-  }
-  else {
-    botaoClicado()
-  }
+  ])
+  alert(`Aptidao: ${melhorIndividuo.aptidao}, 
+    x1 = ${melhorIndividuo.x1}, 
+    x2 = ${melhorIndividuo.x2}, 
+    erro = ${melhorIndividuo.erro},
+    geração encontrada = ${melhorIndividuo.geracaoEncontrado}`)
 }
 function getData() {
   var arr = []
@@ -342,8 +337,8 @@ function getData() {
   }
   return arr
 }
-/*
-function getData(population) {
+
+/*function getData(population) {
   var arr = {
     x: [],
     y: [],
