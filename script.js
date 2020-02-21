@@ -97,7 +97,7 @@ function operadorMutacao(popOld, probMutacao) {
   return mutado
 }
 
-function roleta(popOld, probCruzamento, probMutacao, elite) {
+function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
   var sumFit = 0
   var acumulatorProb = 0
   var arrayRoleta = []
@@ -133,7 +133,7 @@ function roleta(popOld, probCruzamento, probMutacao, elite) {
 
     let casal = [selected[sorteados[0]], selected[sorteados[1]]]
 
-    var tam = filhos.push(...operadorCruzamento(casal, probCruzamento))
+    var tam = filhos.push(...operadorCruzamento(casal, probCruzamento, doisPontos))
     
     while(tam>tamanhoRetorno) {
       filhos.pop()
@@ -157,18 +157,23 @@ function melhorCasal(individuos, lista) {
     maior = individuos[lista[1]]
     segundoMaior = individuos[lista[0]]
   }
-  segundoMaior
+  
   for (let i = 2; i < lista.length; i++) {
     if (individuos[lista[i]].aptidao > maior.aptidao) {
       segundoMaior = maior
       maior = individuos[lista[i]]
     }
+    else if(individuos[lista[i]] > segundoMaior.aptidao) {
+      // isso é no caso de o primeiro for o maior
+      segundoMaior = individuos[lista[i]]
+    }
   }
   return [maior, segundoMaior]
 }
 
-function torneio(popOld, tamanhoTorneio, probCruzamento, elite) {
-  var filhos = elite
+function torneio(popOld, tamanhoTorneio, probCruzamento, doisPontos, elite) {
+  var filhos = []
+  var tamanhoRetorno = popOld.length - elite.length
 
   do {
     // sorteia x valores na pop
@@ -181,10 +186,18 @@ function torneio(popOld, tamanhoTorneio, probCruzamento, elite) {
     }
     //selecionar casal
     var casal = melhorCasal(popOld, sorteados)
+    
+    tam = filhos.push(...operadorCruzamento(casal, probCruzamento, doisPontos))
+    while(tam>tamanhoRetorno) {
+      filhos.pop()
+      tam--
+    }
+  } while (filhos.length < tamanhoRetorno)
 
-    filhos.push(...operadorCruzamento(casal, probCruzamento))
-  } while (filhos.length < popOld.length)
-  return filhos
+  let mutado = operadorMutacao(filhos, probMutacao)
+
+  mutado.push(...elite)
+  return mutado
 }
 
 function elitismo(popOld, tamanhoElitismo) {
@@ -211,6 +224,7 @@ function botaoClicado() {
   const tamanhoPop = parseInt(document.getElementById("tamanhoPop").value)
   const probCruzamento =
     parseInt(document.getElementById("probCruzamento").value) / 100
+  const doisPontos = document.getElementById("doisPontos").checked
   const probMutacao =
     parseInt(document.getElementById("probMutacao").value) / 100
   const qtGeracoes = parseInt(document.getElementById("qtGeracoes").value)
@@ -221,7 +235,7 @@ function botaoClicado() {
   const tamanhoElitismo = parseInt(
     document.getElementById("tamanhoElitismo").value
   )
-
+  
   // validacoes
   if (tamanhoTorneio > tamanhoPop) {
     alert("torneio muito grande!")
@@ -251,19 +265,27 @@ function botaoClicado() {
   }
   add += `<br />`
 
+  var melhorIndividuo = elitismo(population, 1)[0]
+
   for (let cont = 1; cont < qtGeracoes; cont++) {
     var best = []
 
     // elitismo nesta parte!
     var elite = elitismo(population, tamanhoElitismo)
-    
+    var melhorAgora = elitismo(population, 1)[0]
+
+    if(melhorAgora.aptidao > melhorIndividuo.aptidao){
+      melhorIndividuo = melhorAgora
+      melhorIndividuo.geracaoEncontrado = cont
+      melhorIndividuo.erro = melhorIndividuo.aptidao / 38.76
+    }
     if (tipo == 1) {
       // seleciona melhores por roleta
-      best = roleta(population, probCruzamento, probMutacao, elite)
+      best = roleta(population, probCruzamento, probMutacao, doisPontos, elite)
     }
     if (tipo == 2) {
       // faz torneio
-      best = torneio(population, tamanhoTorneio, probCruzamento, elite)
+      best = torneio(population, tamanhoTorneio, probCruzamento, doisPontos, elite)
     }
     population = best
 
@@ -298,8 +320,17 @@ function botaoClicado() {
       type: "surface"
     }
   ])*/
+  if(melhorIndividuo.aptidao>38.77){
+    alert(`Aptidao: ${melhorIndividuo.aptidao}, 
+      x1 = ${melhorIndividuo.x1}, 
+      x2 = ${melhorIndividuo.x2}, 
+      erro = ${melhorIndividuo.erro},
+      geração encontrada = ${melhorIndividuo.geracaoEncontrado}`)
+  }
+  else {
+    botaoClicado()
+  }
 }
-
 function getData() {
   var arr = []
   for (let i = 0; i < 10; i++) {
