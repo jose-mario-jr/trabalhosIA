@@ -7,29 +7,29 @@ function converteReal(lista, sup = 100, inf = 0) {
 }
 
 //gera populacao inicial
-function initialPopulation(individuals = 10, genes = 8) {
+function populacaoInicial(individuos = 10, genes = 8) {
   var pop = []
-  for (i = 0; i < individuals; i++) {
-    var cromossome = {
+  for (i = 0; i < individuos; i++) {
+    var cromossomo = {
       genes: []
     }
     for (j = 0; j < genes; j++) {
-      cromossome.genes.push(Math.round(Math.random()))
+      cromossomo.genes.push(Math.round(Math.random()))
     }
-    pop.push(cromossome)
+    pop.push(cromossomo)
   }
   return pop
 }
 
-function fitness(cromossome) {
-  let chunk1 = cromossome.genes.slice(0, cromossome.genes.length / 2)
-  let chunk2 = cromossome.genes.slice(
-    cromossome.genes.length / 2,
-    cromossome.genes.length
+function fitness(cromossomo) {
+  let pedaco1 = cromossomo.genes.slice(0, cromossomo.genes.length / 2)
+  let pedaco2 = cromossomo.genes.slice(
+    cromossomo.genes.length / 2,
+    cromossomo.genes.length
   )
 
-  let x1 = converteReal(chunk1, -3.1, 12.1)
-  let x2 = converteReal(chunk2, 4.1, 5.8)
+  let x1 = converteReal(pedaco1, -3.1, 12.1)
+  let x2 = converteReal(pedaco2, 4.1, 5.8)
 
   return (
     21.5 + x1 * Math.sin(4 * Math.PI * x1) + x2 * Math.sin(20 * Math.PI * x2)
@@ -46,7 +46,7 @@ function sorteio(arrayRoleta) {
 }
 
 function operadorCruzamento(popOld, probCruzamento) {
-  let crossed = []
+  let filhos = []
   for (let i = 0; i < popOld.length / 2; i++) {
     sorteados = [
       Math.floor(Math.random() * popOld.length),
@@ -55,7 +55,6 @@ function operadorCruzamento(popOld, probCruzamento) {
     while (sorteados[0] == sorteados[1])
       sorteados[1] = Math.floor(Math.random() * popOld.length)
     casal = [popOld[sorteados[0]], popOld[sorteados[1]]]
-    console.log(casal, sorteados)
     cruzaOuNao = Math.random()
     if (cruzaOuNao < probCruzamento) {
       pontoCruzamento = Math.round(Math.random() * casal[0].genes.length)
@@ -72,30 +71,30 @@ function operadorCruzamento(popOld, probCruzamento) {
         cromossomosNovos[1].genes[index] = casal[1].genes[index]
         cromossomosNovos[0].genes[index] = casal[0].genes[index]
       }
-      crossed.push(...cromossomosNovos)
+      filhos.push(...cromossomosNovos)
     } else {
       // só passa para frente
-      crossed.push(...casal)
+      filhos.push(...casal)
     }
   }
-  return crossed
+  return filhos
 }
 
 function operadorMutacao(popOld, probMutacao) {
-  let muted = popOld
-  console.log(muted)
-  for (let i = 0; i < muted.length; i++) {
-    for (let j = 0; j < muted[i].genes.length; j++) {
+  let mutado = popOld
+  console.log(mutado)
+  for (let i = 0; i < mutado.length; i++) {
+    for (let j = 0; j < mutado[i].genes.length; j++) {
       mutaOuNao = Math.random()
       if (mutaOuNao < probMutacao) {
-        muted[i].genes[j] = Math.round(Math.random())
+        mutado[i].genes[j] = Math.round(Math.random())
       }
     }
   }
-  return muted
+  return mutado
 }
 
-function roulette(popOld, probCruzamento, probMutacao) {
+function roleta(popOld, probCruzamento, probMutacao) {
   var sumFit = 0
   var acumulatorProb = 0
   var arrayRoleta = []
@@ -116,48 +115,79 @@ function roulette(popOld, probCruzamento, probMutacao) {
     selected.push(popOld[pos])
   }
 
-  let crossed = operadorCruzamento(selected, probCruzamento)
-  let muted = operadorMutacao(crossed, probMutacao)
-  return muted
+  let filhos = operadorCruzamento(selected, probCruzamento)
+  let mutado = operadorMutacao(filhos, probMutacao)
+  return mutado
+}
+
+function torneio(popOld, tamanhoTorneio) {
+  filhos = []
+  do {
+    // sorteia x valores na pop
+    sorteados = []
+    for (i = 0; i < tamanhoTorneio; i++) {
+      sorteio = Math.round(Math.random() * popOld.length)
+      while (sorteados.includes(sorteio))
+        sorteio = Math.round(Math.random() * popOld.length)
+      sorteados.push(sorteio)
+    }
+    console.log(sorteados)
+    return sorteados
+  } while (filhos.length < popOld.length)
 }
 
 function botaoClicado() {
-  const tamanhoC = document.getElementById("tamanhoC").value
-  const tamanhoPop = document.getElementById("tamanhoPop").value
-  const probCruzamento = document.getElementById("probCruzamento").value
-  const probMutacao = document.getElementById("probMutacao").value
-  const qtGeracoes = document.getElementById("qtGeracoes").value
+  const tamanhoC = parseInt(document.getElementById("tamanhoC").value)
+  const tamanhoPop = parseInt(document.getElementById("tamanhoPop").value)
+  const probCruzamento =
+    parseInt(document.getElementById("probCruzamento").value) / 100
+  const probMutacao =
+    parseInt(document.getElementById("probMutacao").value) / 100
+  const qtGeracoes = parseInt(document.getElementById("qtGeracoes").value)
   const tipo = document.getElementById("tipo").value
-  console.log(probCruzamento, probMutacao)
-
-  var population = initialPopulation(tamanhoPop, tamanhoC)
+  const tamanhoTorneio = parseInt(
+    document.getElementById("tamanhoTorneio").value
+  )
+  const tamanhoElitismo = parseInt(
+    document.getElementById("tamanhoElitismo").value
+  )
+  var population = populacaoInicial(tamanhoPop, tamanhoC)
   // calcula aptidao
   for (let k = 0; k < population.length; k++) {
     population[k].fitness = parseFloat(fitness(population[k]).toFixed(2))
   }
   var add = ""
 
-  if (tipo == 1) {
-    // roleta
-    for (let cont = 0; cont < qtGeracoes; cont++) {
+  for (let cont = 0; cont < qtGeracoes; cont++) {
+    var best = []
+    if (tipo == 1) {
       // seleciona melhores por roleta
-      var best = roulette(population, probCruzamento, probMutacao)
-      population = best
-
-      // calcula aptidao
-      for (let k = 0; k < population.length; k++) {
-        population[k].fitness = parseFloat(fitness(population[k]).toFixed(2))
+      best = roleta(population, probCruzamento, probMutacao)
+    }
+    if (tipo == 2) {
+      // faz torneio
+      if (tamanhoTorneio < tamanhoPop) {
+        best = torneio(population, tamanhoTorneio)
+        return
+      } else {
+        alert("torneio muito grande!")
       }
+    }
+    population = best
 
-      add += `Geracao ${cont}, individuos: `
-      for (k = 0; k < population.length; k++) {
-        add += `
+    // calcula aptidao
+    for (let k = 0; k < population.length; k++) {
+      population[k].fitness = parseFloat(fitness(population[k]).toFixed(2))
+    }
+
+    add += `Geracao ${cont}, individuos: `
+    for (k = 0; k < population.length; k++) {
+      add += `
           <span title="${population[k].genes}">
             ${population[k].fitness};   
           </span>  `
-      }
-      add += `<br />`
     }
+    add += `<br />`
   }
   var arr = [];
   add += `populacao resultante: <br />`
