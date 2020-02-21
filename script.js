@@ -31,9 +31,12 @@ function aptidao(cromossomo) {
   let x1 = converteReal(pedaco1, -3.1, 12.1)
   let x2 = converteReal(pedaco2, 4.1, 5.8)
 
-  return (
-    21.5 + x1 * Math.sin(4 * Math.PI * x1) + x2 * Math.sin(20 * Math.PI * x2)
-  )
+  return {
+    valor:
+      21.5 + x1 * Math.sin(4 * Math.PI * x1) + x2 * Math.sin(20 * Math.PI * x2),
+    x1: x1,
+    x2: x2
+  }
 }
 
 function sorteio(arrayRoleta) {
@@ -45,22 +48,29 @@ function sorteio(arrayRoleta) {
   return c
 }
 
-function operadorCruzamento(casal, probCruzamento) {
-  cruzaOuNao = Math.random()
+function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
+  var filhos = [{ genes: casal[0].genes }, { genes: casal[1].genes }]
+
+  var cruzaOuNao = Math.random()
   if (cruzaOuNao < probCruzamento) {
-    pontoCruzamento = Math.round(Math.random() * casal[0].genes.length)
-    filhos = [{ genes: [] }, { genes: [] }]
-    for (var index = 0; index < pontoCruzamento; index++) {
-      filhos[0].genes[index] = casal[0].genes[index]
-      filhos[1].genes[index] = casal[1].genes[index]
+    var ponto1 = Math.round(Math.random() * casal[0].genes.length)
+    var ponto2 = casal[0].genes.length
+    if (doisPontos) {
+      var ponto2 = Math.round(Math.random() * casal[0].genes.length)
+      while (ponto1 == ponto2)
+        ponto2 = Math.round(Math.random() * casal[0].genes.length)
+
+      if (ponto1 > ponto2) {
+        let aux = ponto2
+        ponto2 = ponto1
+        ponto1 = aux
+      }
     }
-    for (var index = pontoCruzamento; index < casal[0].genes.length; index++) {
-      filhos[1].genes[index] = casal[1].genes[index]
-      filhos[0].genes[index] = casal[0].genes[index]
+
+    for (var index = ponto1; index < ponto2; index++) {
+      filhos[1].genes[index] = casal[0].genes[index]
+      filhos[0].genes[index] = casal[1].genes[index]
     }
-  } else {
-    // só passa para frente
-    filhos = casal
   }
   return filhos
 }
@@ -79,11 +89,11 @@ function operadorMutacao(popOld, probMutacao) {
   return mutado
 }
 
-function roleta(popOld, probCruzamento, probMutacao) {
+function roleta(popOld, probCruzamento, probMutacao, elite) {
   var sumFit = 0
   var acumulatorProb = 0
   var arrayRoleta = []
-  var selected = []
+  var selected = elite
 
   for (let c = 0; c < popOld.length; c++) {
     sumFit += popOld[c].aptidao
@@ -94,7 +104,7 @@ function roleta(popOld, probCruzamento, probMutacao) {
     acumulatorProb = popOld[c].probNow + acumulatorProb
     arrayRoleta.push(acumulatorProb)
   }
-  for (let i = 0; i < popOld.length; i++) {
+  for (let i = 0; i < popOld.length - elite.length; i++) {
     let pos = sorteio(arrayRoleta)
 
     selected.push(popOld[pos])
@@ -137,8 +147,9 @@ function melhorCasal(individuos, lista) {
   return [maior, segundoMaior]
 }
 
-function torneio(popOld, tamanhoTorneio, probCruzamento) {
-  var filhos = []
+function torneio(popOld, tamanhoTorneio, probCruzamento, elite) {
+  var filhos = elite
+
   do {
     // sorteia x valores na pop
     var sorteados = []
@@ -154,6 +165,25 @@ function torneio(popOld, tamanhoTorneio, probCruzamento) {
     filhos.push(...operadorCruzamento(casal, probCruzamento))
   } while (filhos.length < popOld.length)
   return filhos
+}
+
+function elitismo(popOld, tamanhoElitismo) {
+  var retorno = []
+  var escolhidos = []
+
+  for (let i = 0; i < tamanhoElitismo; i++) {
+    var maior = popOld[0]
+    var indiceMaior = 0
+    for (let j = 0; j < popOld.length; j++) {
+      if (popOld[j].aptidao > maior.aptidao && !escolhidos.includes(j)) {
+        maior = popOld[j]
+        indiceMaior = j
+      }
+    }
+    escolhidos.push[indiceMaior]
+    retorno.push(maior)
+  }
+  return retorno
 }
 
 function botaoClicado() {
@@ -174,20 +204,27 @@ function botaoClicado() {
   var population = populacaoInicial(tamanhoPop, tamanhoC)
   // calcula aptidao
   for (let k = 0; k < population.length; k++) {
-    population[k].aptidao = parseFloat(aptidao(population[k]).toFixed(2))
+    apt = aptidao(population[k])
+    population[k].aptidao = parseFloat(apt.valor.toFixed(2))
+    population[k].x1 = parseFloat(apt.x1)
+    population[k].x2 = parseFloat(apt.x2)
   }
   var add = ""
 
   for (let cont = 0; cont < qtGeracoes; cont++) {
     var best = []
+
+    // elitismo nesta parte!
+    elite = elitismo(population, tamanhoElitismo)
+
     if (tipo == 1) {
       // seleciona melhores por roleta
-      best = roleta(population, probCruzamento, probMutacao)
+      best = roleta(population, probCruzamento, probMutacao, elite)
     }
     if (tipo == 2) {
       // faz torneio
       if (tamanhoTorneio < tamanhoPop) {
-        best = torneio(population, tamanhoTorneio, probCruzamento)
+        best = torneio(population, tamanhoTorneio, probCruzamento, elite)
       } else {
         alert("torneio muito grande!")
       }
@@ -196,7 +233,10 @@ function botaoClicado() {
 
     // calcula aptidao
     for (let k = 0; k < population.length; k++) {
-      population[k].aptidao = parseFloat(aptidao(population[k]).toFixed(2))
+      apt = aptidao(population[k])
+      population[k].aptidao = parseFloat(apt.valor.toFixed(2))
+      population[k].x1 = parseFloat(apt.x1)
+      population[k].x2 = parseFloat(apt.x2)
     }
 
     add += `Geracao ${cont}, individuos: `
@@ -208,24 +248,44 @@ function botaoClicado() {
     }
     add += `<br />`
   }
-  var arr = [];
+  var arr = []
   add += `populacao resultante: <br />`
   for (k = 0; k < population.length; k++) {
     add += `${population[k].genes} -> ${population[k].aptidao} <br/>`
   }
   document.getElementById("log").innerHTML = add
-  Plotly.newPlot('chart',[{
-    z: getData(),
-    type: 'surface'
-  }])
+  dados = Plotly.newPlot("chart", [
+    {
+      z: getData(),
+      type: "surface"
+    }
+  ])
 }
 
-function getData(){
-  var arr = [];
-  for(let i = 0;i<10;i++){
-    arr.push(Array(10).fill().map(() => Math.random()));
+function getData() {
+  var arr = []
+  for (let i = 0; i < 10; i++) {
+    arr.push(
+      Array(10)
+        .fill()
+        .map(() => Math.random())
+    )
   }
-  return arr;
+  return arr
 }
+/*
+function getData(population) {
+  var arr = {
+    x: [],
+    y: [],
+    z: []
+  }
+  for (let i = 0; i < population.length; i++) {
+    arr.x.push(population[i].x1)
+    arr.y.push(population[i].x2)
+    arr.z.push(population[i].aptidao)
+  }
+  return arr
+}*/
 
 //--------------------------------------------------------
