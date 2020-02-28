@@ -73,8 +73,8 @@ function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
         filhos[0].genes.push(casal[0].genes[index])
       }
     }
-    console.log("casal: ", casal)
-    console.log("filhos: ", filhos)
+    // console.log("casal: ", casal)
+    // console.log("filhos: ", filhos)
     return filhos
   } else {
     return casal
@@ -264,13 +264,14 @@ function botaoClicado() {
   }
   add += `<br />`
 
-  maiorGlobal = 38.76
+  maiorGlobal = 38.85
   var melhorIndividuo = elitismo(population, 1)[0]
   melhorIndividuo.geracaoEncontrado = 0
   melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
 
   acumuladorPlot = []
   plot(population, acumuladorPlot, 0)
+  
   for (let cont = 1; cont < qtGeracoes; cont++) {
     var best = []
 
@@ -309,6 +310,12 @@ function botaoClicado() {
 
     // plota
     plot(population, acumuladorPlot, cont)
+    
+    /*const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < 1000);*/
 
     // poe na view
     add += `Geracao ${cont}, individuos: `
@@ -356,7 +363,9 @@ function plot(populacao, acumuladorPlot, geracao) {
     },
     height: 750
   }
-  dados = Plotly.newPlot("chart", data, layout)
+  setTimeout(() => {
+    Plotly.newPlot("chart", data, layout)
+  }, 1000*geracao);
 }
 
 function getData(populacao, ger) {
