@@ -140,8 +140,7 @@ function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
     }
   }
 
-  return filhos
-  // let mutado = operadorMutacao(filhos, probMutacao)
+  let mutado = operadorMutacao(filhos, probMutacao)
 
   mutado.push(...elite)
   return mutado
@@ -334,7 +333,7 @@ function botaoClicado() {
   for (k = 0; k < population.length; k++) {
     add += `${population[k].genes} -> ${population[k].aptidao} <br/>`
   }
-  document.getElementById("log").innerHTML = add
+  //document.getElementById("log").innerHTML = add
 
   alert(`Aptidao: ${melhorIndividuo.aptidao}, 
     x1 = ${melhorIndividuo.x1}, 
@@ -353,14 +352,15 @@ function plot(acumuladorPlot) {
       name: `Geracao ${acumuladorPlot[a].geracao}`,
       x: acumuladorPlot[a].dados[0],
       y: acumuladorPlot[a].dados[1],
-      z: acumuladorPlot[a].dados[2]
+      z: acumuladorPlot[a].dados[2],
+      mode: 'markers',
     })
   }
   var layout = {
     scene: {
-      xaxis: { nticks: 10, range: [-3.1, 12.1] },
-      yaxis: { nticks: 10, range: [4.1, 5.8] },
-      zaxis: { nticks: 10, range: [0, 50] }
+      xaxis: { range: [-3.1, 12.1] },
+      yaxis: { range: [4.1, 5.8] },
+      zaxis: { range: [0, 50] }
     },
     height: 750
   }
