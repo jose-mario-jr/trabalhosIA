@@ -40,11 +40,8 @@ function aptidao(cromossomo) {
 }
 
 function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
-  var filhos = [
-    { genes: [] }, 
-    { genes: [] }
-  ]
-  
+  var filhos = [{ genes: [] }, { genes: [] }]
+
   var cruzaOuNao = Math.random()
   if (cruzaOuNao < probCruzamento) {
     var ponto1 = Math.round(Math.random() * casal[0].genes.length)
@@ -70,17 +67,16 @@ function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
       filhos[1].genes.push(casal[0].genes[index])
       filhos[0].genes.push(casal[1].genes[index])
     }
-    if(doisPontos){
+    if (doisPontos) {
       for (var index = ponto2; index < casal[0].genes.length; index++) {
         filhos[1].genes.push(casal[1].genes[index])
         filhos[0].genes.push(casal[0].genes[index])
       }
-    }  
-    console.log('casal: ', casal)
-    console.log('filhos: ', filhos)
+    }
+    console.log("casal: ", casal)
+    console.log("filhos: ", filhos)
     return filhos
-  }
-  else {
+  } else {
     return casal
   }
 }
@@ -113,7 +109,7 @@ function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
     acumulatorProb = popOld[c].probNow + acumulatorProb
     arrayRoleta.push(acumulatorProb)
   }
-  for (let i = 0; i < tamanhoRetorno; i++) {  
+  for (let i = 0; i < tamanhoRetorno; i++) {
     let rand = Math.random()
     let pos = 0
     while (arrayRoleta[pos] <= rand) {
@@ -124,7 +120,7 @@ function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
   }
 
   let filhos = []
-  while(filhos.length < tamanhoRetorno) {
+  while (filhos.length < tamanhoRetorno) {
     let sorteados = [
       Math.floor(Math.random() * selected.length),
       Math.floor(Math.random() * selected.length)
@@ -134,9 +130,11 @@ function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
 
     let casal = [selected[sorteados[0]], selected[sorteados[1]]]
 
-    var tam = filhos.push(...operadorCruzamento(casal, probCruzamento, doisPontos))
-    
-    while(tam>tamanhoRetorno) {
+    var tam = filhos.push(
+      ...operadorCruzamento(casal, probCruzamento, doisPontos)
+    )
+
+    while (tam > tamanhoRetorno) {
       filhos.pop()
       tam--
     }
@@ -144,7 +142,7 @@ function roleta(popOld, probCruzamento, probMutacao, doisPontos, elite) {
 
   return filhos
   // let mutado = operadorMutacao(filhos, probMutacao)
-  
+
   mutado.push(...elite)
   return mutado
 }
@@ -159,13 +157,12 @@ function melhorCasal(individuos, lista) {
     maior = individuos[lista[1]]
     segundoMaior = individuos[lista[0]]
   }
-  
+
   for (let i = 2; i < lista.length; i++) {
     if (individuos[lista[i]].aptidao > maior.aptidao) {
       segundoMaior = maior
       maior = individuos[lista[i]]
-    }
-    else if(individuos[lista[i]] > segundoMaior.aptidao) {
+    } else if (individuos[lista[i]] > segundoMaior.aptidao) {
       // isso é no caso de o primeiro for o maior
       segundoMaior = individuos[lista[i]]
     }
@@ -188,9 +185,9 @@ function torneio(popOld, tamanhoTorneio, probCruzamento, doisPontos, elite) {
     }
     //selecionar casal
     var casal = melhorCasal(popOld, sorteados)
-    
+
     tam = filhos.push(...operadorCruzamento(casal, probCruzamento, doisPontos))
-    while(tam>tamanhoRetorno) {
+    while (tam > tamanhoRetorno) {
       filhos.pop()
       tam--
     }
@@ -237,14 +234,14 @@ function botaoClicado() {
   const tamanhoElitismo = parseInt(
     document.getElementById("tamanhoElitismo").value
   )
-  
+
   // validacoes
   if (tamanhoTorneio > tamanhoPop) {
     alert("torneio muito grande!")
     document.getElementById("tamanhoTorneio").value = 2
     return
   }
-  if(tamanhoElitismo>tamanhoPop) {
+  if (tamanhoElitismo > tamanhoPop) {
     alert("O elitismo não pode ser maior que a população!")
     document.getElementById("tamanhoElitismo").value = 1
     return
@@ -272,6 +269,8 @@ function botaoClicado() {
   melhorIndividuo.geracaoEncontrado = 0
   melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
 
+  acumuladorPlot = []
+  plot(population, acumuladorPlot, 0)
   for (let cont = 1; cont < qtGeracoes; cont++) {
     var best = []
 
@@ -279,7 +278,7 @@ function botaoClicado() {
     var elite = elitismo(population, tamanhoElitismo)
     var melhorAgora = elitismo(population, 1)[0]
 
-    if(melhorAgora.aptidao > melhorIndividuo.aptidao){
+    if (melhorAgora.aptidao > melhorIndividuo.aptidao) {
       melhorIndividuo = melhorAgora
       melhorIndividuo.geracaoEncontrado = cont
       melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
@@ -290,7 +289,13 @@ function botaoClicado() {
     }
     if (tipo == 2) {
       // faz torneio
-      best = torneio(population, tamanhoTorneio, probCruzamento, doisPontos, elite)
+      best = torneio(
+        population,
+        tamanhoTorneio,
+        probCruzamento,
+        doisPontos,
+        elite
+      )
     }
     population = best
 
@@ -301,10 +306,10 @@ function botaoClicado() {
       population[k].x1 = parseFloat(apt.x1)
       population[k].x2 = parseFloat(apt.x2)
     }
-    
+
     // plota
-    // plot(population)
-    
+    plot(population, acumuladorPlot, cont)
+
     // poe na view
     add += `Geracao ${cont}, individuos: `
     for (k = 0; k < population.length; k++) {
@@ -321,41 +326,48 @@ function botaoClicado() {
   }
   document.getElementById("log").innerHTML = add
 
-  // plota no grafico
-  dados = Plotly.newPlot("chart", [
-    {
-      z: getData(),
-      type: "surface"
-    }
-  ])
-  
   alert(`Aptidao: ${melhorIndividuo.aptidao}, 
     x1 = ${melhorIndividuo.x1}, 
     x2 = ${melhorIndividuo.x2}, 
-    erro = ${(melhorIndividuo.erro*100).toFixed(2)}%,
+    erro = ${(melhorIndividuo.erro * 100).toFixed(2)}%,
     geração encontrada = ${melhorIndividuo.geracaoEncontrado}`)
 }
 
 // plota no grafico
-function plot(populacao){
-  novo = populacao
-  novo.sort((a, b) => a.x1 - b.x1)
-  console.log(populacao, novo)
-  dados = Plotly.newPlot("chart", [
-  {
-    z: getData(),
-    type: "surface"
-  }])
+function plot(populacao, acumuladorPlot, geracao) {
+  acumuladorPlot.push(getData(populacao, geracao))
+  console.log(acumuladorPlot)
+  var data = []
+  for (var a = 0; a < acumuladorPlot.length; a++) {
+    data.push({
+      opacity: 0.5,
+      type: "scatter3d",
+      name: `Geracao ${acumuladorPlot[a].geracao}`,
+      x: acumuladorPlot[a].dados[0],
+      y: acumuladorPlot[a].dados[1],
+      z: acumuladorPlot[a].dados[2]
+    })
+  }
+  var layout = {
+    scene: {
+      xaxis: { nticks: 10, range: [-3.1, 12.1] },
+      yaxis: { nticks: 10, range: [4.1, 5.8] },
+      zaxis: { nticks: 10, range: [0, 50] }
+    },
+    height: 750
+  }
+  dados = Plotly.newPlot("chart", data, layout)
 }
 
-function getData() {
-  var arr = []
+function getData(populacao, ger) {
+  var arr = {
+    geracao: ger,
+    dados: [[], [], []]
+  }
   for (let i = 0; i < 10; i++) {
-    arr.push(
-      Array(10)
-        .fill()
-        .map(() => Math.random())
-    )
+    arr.dados[0].push(populacao[i].x1)
+    arr.dados[1].push(populacao[i].x2)
+    arr.dados[2].push(populacao[i].aptidao)
   }
   return arr
 }
