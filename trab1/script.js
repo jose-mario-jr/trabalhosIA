@@ -271,7 +271,7 @@ function botaoClicado() {
   acumuladorPlot = []
   acumuladorPlot.push(getData(population, 0))
   plot(acumuladorPlot)
-  
+
   for (let cont = 1; cont < qtGeracoes; cont++) {
     var best = []
 
@@ -310,7 +310,7 @@ function botaoClicado() {
 
     // atualiza acumulador de plot
     acumuladorPlot.push(getData(population, cont))
-    
+
     /*const date = Date.now();
     let currentDate = null;
     do {
@@ -328,12 +328,12 @@ function botaoClicado() {
     add += `<br />`
   }
   plot(acumuladorPlot)
-  
+
   add += `populacao resultante: <br />`
   for (k = 0; k < population.length; k++) {
     add += `${population[k].genes} -> ${population[k].aptidao} <br/>`
   }
-  //document.getElementById("log").innerHTML = add
+  document.getElementById("log").innerHTML = add
 
   alert(`Aptidao: ${melhorIndividuo.aptidao}, 
     x1 = ${melhorIndividuo.x1}, 
@@ -353,7 +353,7 @@ function plot(acumuladorPlot) {
       x: acumuladorPlot[a].dados[0],
       y: acumuladorPlot[a].dados[1],
       z: acumuladorPlot[a].dados[2],
-      mode: 'markers',
+      mode: "markers"
     })
   }
   var layout = {
@@ -364,9 +364,13 @@ function plot(acumuladorPlot) {
     },
     height: 750
   }
-  //setTimeout(() => {
+
   Plotly.newPlot("chart", data, layout)
-  //}, 1000*geracao);
+
+  // // trecho comentado para melhor UX
+  // setTimeout(() => {
+  // Plotly.newPlot("chart", data, layout)
+  // }, 1000*geracao);
 }
 
 function getData(populacao, ger) {
@@ -381,19 +385,3 @@ function getData(populacao, ger) {
   }
   return arr
 }
-
-/*function getData(population) {
-  var arr = {
-    x: [],
-    y: [],
-    z: []
-  }
-  for (let i = 0; i < population.length; i++) {
-    arr.x.push(population[i].x1)
-    arr.y.push(population[i].x2)
-    arr.z.push(population[i].aptidao)
-  }
-  return arr
-}*/
-
-//--------------------------------------------------------
