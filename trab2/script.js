@@ -9,6 +9,18 @@ function converteReal(lista, sup = 100, inf = 0) {
 //gera populacao inicial
 function populacaoInicial(individuos = 10, genes = 8) {
   var pop = []
+  // 21 genes (3horarios e 7 dias)
+  //gerar 5 equipes (1 e 2 = equipe 0; 3 e 4 = equipe 1 .....)
+  // embaralhar um vetor de 0 a 4 para gerar o cromossomo:
+  // [
+  //    0,0,0,0,
+  //    1,1,1,1,
+  //    2,2,2,2,
+  //    3,3,3,3,
+  //    4,4,4,4,
+  //    (0 ou 2)
+  // ]
+  // este ultimo gene é o valor da equipe que vai ter curso (0 ou 2)
   for (i = 0; i < individuos; i++) {
     var cromossomo = {
       genes: []
