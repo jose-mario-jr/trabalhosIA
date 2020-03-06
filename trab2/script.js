@@ -1,3 +1,15 @@
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+var myArray = ['1','2','3','4','5'];
+console.log(shuffle(myArray));
+
+
 function converteReal(lista, sup = 100, inf = 0) {
   var baseDez = 0
   for (i = 0; i < lista.length; i++) {
@@ -21,6 +33,9 @@ function populacaoInicial(individuos = 10, genes = 8) {
   //    (0 ou 2)
   // ]
   // este ultimo gene é o valor da equipe que vai ter curso (0 ou 2)
+
+
+  // insere na lista de genes os numero de individuos, e coloca o numero de genes para cada individuo aleatoriamente
   for (i = 0; i < individuos; i++) {
     var cromossomo = {
       genes: []
@@ -28,11 +43,14 @@ function populacaoInicial(individuos = 10, genes = 8) {
     for (j = 0; j < genes; j++) {
       cromossomo.genes.push(Math.round(Math.random()))
     }
+    // insere na lista de população
     pop.push(cromossomo)
   }
   return pop
 }
 
+
+// faz a funcão de aptidao que calcula a aptidao de certo individuo
 function aptidao(cromossomo) {
   let pedaco1 = cromossomo.genes.slice(0, cromossomo.genes.length / 2)
   let pedaco2 = cromossomo.genes.slice(
@@ -397,3 +415,5 @@ function getData(populacao, ger) {
   }
   return arr
 }
+
+
