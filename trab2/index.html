@@ -5,23 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Trabalho 1 -> maximo local com AG</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-1.5.0.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.js" charset="utf-8"></script>
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="form">
-      <div class="campo">
-        <label for="tamanhoC">Tamanho do cromossomo:</label>
-        <input
-          type="number"
-          name="tamanhoC"
-          id="tamanhoC"
-          value="8"
-          placeholder="tamanho do cromossomo"
-        />
-      </div>
       <div class="campo">
         <label for="tamanhoPop">tamanho da população: </label>
         <input
@@ -99,56 +87,32 @@
     </div>
     <button onclick="botaoClicado()">Go!</button>
 
-    <div class="tabela"><span>Tabela de turnos gerado</span>
-        <table>
-      <tr>
-        <th></th>
-        <th>Segunda</th>
-        <th>Terça</th>
-        <th>Quart</th>
-        <th>Quinta</th>
-        <th>Sexta</th>
-        <th>Sábado</th>
-        <th>Domingo</th>
-      </tr>
-      <tr>
-        <td>Turno 1
-          (6h – 14h)</td>
-        <td>Maria Anders</td>
-        <td>Germany</td>
-        <td>Maria Anders</td>
-        <td>Germany</td>
-        <td>Maria Anders</td>
-        <td>Germany</td>
-        <td>Maria Anders</td>
-      </tr>
-      <tr>
-        <td>Turno 2
-          (14h – 22h)</td>
-        <td>Francisco Chang</td>
-        <td>Mexico</td>
-        <td>Maria Anders</td>
-        <td>Germany</td>
-        <td>Maria Anders</td>
-        <td>Germany</td>
-        <td>Maria Anders</td>
-      </tr>
-      <tr>
-        <td>Turno 3
-          (22h – 6h) </td>
-        <td>Roland Mendel</td>
-        <td>Austria</td>
-        <td>Maria Anders</td>
-        <td>Germany</td>
-        <td>Maria Anders</td>
-        <td>Germany</td>
-        <td>Maria Anders</td>
-      </tr>
-    </table>
-    
+    <div class="tabela">
+      <span>Tabela de turnos gerado</span>
+      <table>
+        <tr>
+          <th></th>
+          <th>Segunda</th>
+          <th>Terça</th>
+          <th>Quarta</th>
+          <th>Quinta</th>
+          <th>Sexta</th>
+          <th>Sábado</th>
+          <th>Domingo</th>
+        </tr>
+        <tr id="trTurno1">
+          <td>Turno 1 (6h – 14h)</td>
+        </tr>
+        <tr id="trTurno2">
+          <td>Turno 2 (14h – 22h)</td>
+        </tr>
+        <tr id="trTurno3">
+          <td>Turno 3 (22h – 6h)</td>
+        </tr>
+      </table>
     </div>
     <div class="navbar"><span>Resultado em tabela</span></div>
-    
+
     <div id="log"></div>
 
     <script src="script.js"></script>

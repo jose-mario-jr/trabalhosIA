@@ -1,72 +1,35 @@
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
   }
-  return a;
+  return a
 }
 
-var myArray = ['1','2','3','4','5'];
-console.log(shuffle(myArray));
-
-
-function converteReal(lista, sup = 100, inf = 0) {
-  var baseDez = 0
-  for (i = 0; i < lista.length; i++) {
-    if (lista[i]) baseDez += 2 ** i
-  }
-  return inf + ((sup - inf) / (2 ** lista.length - 1)) * baseDez
-}
+var myArray = ["1", "2", "3", "4", "5"]
+console.log(shuffle(myArray))
 
 //gera populacao inicial
-function populacaoInicial(individuos = 10, genes = 8) {
+function populacaoInicial(individuos = 10, genes = 42) {
   var pop = []
-  // 21 genes (3horarios e 7 dias)
-  //gerar 5 equipes (1 e 2 = equipe 0; 3 e 4 = equipe 1 .....)
-  // embaralhar um vetor de 0 a 4 para gerar o cromossomo:
-  // [
-  //    0,0,0,0,
-  //    1,1,1,1,
-  //    2,2,2,2,
-  //    3,3,3,3,
-  //    4,4,4,4,
-  //    (0 ou 2)
-  // ]
-  // este ultimo gene é o valor da equipe que vai ter curso (0 ou 2)
-
-
-  // insere na lista de genes os numero de individuos, e coloca o numero de genes para cada individuo aleatoriamente
   for (i = 0; i < individuos; i++) {
     var cromossomo = {
       genes: []
     }
+    // popula cada cromossomo com 42 genes de 0 a 4
     for (j = 0; j < genes; j++) {
-      cromossomo.genes.push(Math.round(Math.random()))
+      cromossomo.genes.push(Math.floor(Math.random() * 5))
     }
-    // insere na lista de população
     pop.push(cromossomo)
   }
   return pop
 }
 
-
 // faz a funcão de aptidao que calcula a aptidao de certo individuo
 function aptidao(cromossomo) {
-  let pedaco1 = cromossomo.genes.slice(0, cromossomo.genes.length / 2)
-  let pedaco2 = cromossomo.genes.slice(
-    cromossomo.genes.length / 2,
-    cromossomo.genes.length
-  )
+  //aplicar regras de aptidao aqui!!
 
-  let x1 = converteReal(pedaco1, -3.1, 12.1)
-  let x2 = converteReal(pedaco2, 4.1, 5.8)
-
-  return {
-    valor:
-      21.5 + x1 * Math.sin(4 * Math.PI * x1) + x2 * Math.sin(20 * Math.PI * x2),
-    x1: x1,
-    x2: x2
-  }
+  return 0
 }
 
 function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
@@ -248,7 +211,7 @@ function elitismo(popOld, tamanhoElitismo) {
 }
 
 function botaoClicado() {
-  const tamanhoC = parseInt(document.getElementById("tamanhoC").value)
+  const tamanhoC = 42
   const tamanhoPop = parseInt(document.getElementById("tamanhoPop").value)
   const probCruzamento =
     parseInt(document.getElementById("probCruzamento").value) / 100
@@ -277,6 +240,9 @@ function botaoClicado() {
   }
 
   var population = populacaoInicial(tamanhoPop, tamanhoC)
+
+  atualizaTabela(population[0])
+
   // calcula aptidao
   for (let k = 0; k < population.length; k++) {
     var apt = aptidao(population[k])
@@ -297,10 +263,6 @@ function botaoClicado() {
   var melhorIndividuo = elitismo(population, 1)[0]
   melhorIndividuo.geracaoEncontrado = 0
   melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
-
-  acumuladorPlot = []
-  acumuladorPlot.push(getData(population, 0))
-  plot(acumuladorPlot)
 
   for (let cont = 1; cont < qtGeracoes; cont++) {
     var best = []
@@ -338,9 +300,6 @@ function botaoClicado() {
       population[k].x2 = parseFloat(apt.x2)
     }
 
-    // atualiza acumulador de plot
-    acumuladorPlot.push(getData(population, cont))
-
     /*const date = Date.now();
     let currentDate = null;
     do {
@@ -357,7 +316,6 @@ function botaoClicado() {
     }
     add += `<br />`
   }
-  plot(acumuladorPlot)
 
   add += `populacao resultante: <br />`
   for (k = 0; k < population.length; k++) {
@@ -372,48 +330,29 @@ function botaoClicado() {
     geração encontrada = ${melhorIndividuo.geracaoEncontrado}`)
 }
 
-// plota no grafico
-function plot(acumuladorPlot) {
-  var data = []
-  for (var a = 0; a < acumuladorPlot.length; a++) {
-    data.push({
-      opacity: 0.5,
-      type: "scatter3d",
-      name: `Geracao ${acumuladorPlot[a].geracao}`,
-      x: acumuladorPlot[a].dados[0],
-      y: acumuladorPlot[a].dados[1],
-      z: acumuladorPlot[a].dados[2],
-      mode: "markers"
-    })
-  }
-  var layout = {
-    scene: {
-      xaxis: { range: [-3.1, 12.1] },
-      yaxis: { range: [4.1, 5.8] },
-      zaxis: { range: [0, 50] }
-    },
-    height: 750
-  }
+function atualizaTabela(individuo) {
+  trTurno1 = document.getElementById("trTurno1")
+  trTurno2 = document.getElementById("trTurno2")
+  trTurno3 = document.getElementById("trTurno3")
 
-  Plotly.newPlot("chart", data, layout)
+  // tira todo o texto das colunas
+  trTurno1.innerHTML = ""
+  trTurno2.innerHTML = ""
+  trTurno3.innerHTML = ""
 
-  // // trecho comentado para melhor UX
-  // setTimeout(() => {
-  // Plotly.newPlot("chart", data, layout)
-  // }, 1000*geracao);
+  // coloca cabecalho
+  trTurno1.insertCell(-1).innerText = "Turno 1 (6h – 14h)"
+  trTurno2.insertCell(-1).innerText = "Turno 2 (14h – 22h)"
+  trTurno3.insertCell(-1).innerText = "Turno 3 (22h – 6h)"
+  for (let b = 0; b < 7; b++) {
+    document.getElementById("trTurno1").insertCell(-1).innerText = `${
+      individuo.genes[6 * b]
+    } e ${individuo.genes[6 * b + 1]}`
+    document.getElementById("trTurno2").insertCell(-1).innerText = `${
+      individuo.genes[6 * b + 2]
+    } e ${individuo.genes[6 * b + 3]}`
+    document.getElementById("trTurno3").insertCell(-1).innerText = `${
+      individuo.genes[6 * b + 4]
+    } e ${individuo.genes[6 * b + 5]}`
+  }
 }
-
-function getData(populacao, ger) {
-  var arr = {
-    geracao: ger,
-    dados: [[], [], []]
-  }
-  for (let i = 0; i < 10; i++) {
-    arr.dados[0].push(populacao[i].x1)
-    arr.dados[1].push(populacao[i].x2)
-    arr.dados[2].push(populacao[i].aptidao)
-  }
-  return arr
-}
-
-
