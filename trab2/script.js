@@ -33,11 +33,10 @@ function aptidao(genes, curso0 = false, curso2 = false) {
   // regra 2: Cada profissional deve folgar 3 turnos antes de poder voltar ao trabalho
   for (let z = 0; z < genes.length; z++) {
     for (let w = 1; w < 4; w++) {
-      if (genes[z] == genes[w]) {
+      if (genes[z] == genes[w + z]) {
         aptidao -= 10
         serveOuNao = false
-      }
-      else if (z < genes.length) aptidao++
+      } else if (z < genes.length) aptidao++
     }
   }
 
@@ -48,9 +47,9 @@ function aptidao(genes, curso0 = false, curso2 = false) {
       if (genes[z] == 0) {
         let curso0Valido = true
         for (let w = 1; w < 7; w++) {
-          if (genes[z] == genes[w]) curso0Valido = false
+          if (genes[z] == genes[w + z]) curso0Valido = false
         }
-        if(curso0Valido) {
+        if (curso0Valido) {
           aptidao += 10
           z = genes.length
         } else {
@@ -67,9 +66,9 @@ function aptidao(genes, curso0 = false, curso2 = false) {
       if (genes[z] == 2) {
         let curso2Valido = true
         for (let w = 1; w < 6; w++) {
-          if (genes[z] == genes[w]) curso2Valido = false
+          if (genes[z] == genes[w + z]) curso2Valido = false
         }
-        if(curso2Valido) {
+        if (curso2Valido) {
           aptidao += 10
           z = genes.length
         } else {
@@ -84,6 +83,7 @@ function aptidao(genes, curso0 = false, curso2 = false) {
   return {
     valor: aptidao,
     valido: serveOuNao
+  }
 }
 
 function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
@@ -265,14 +265,12 @@ function elitismo(popOld, tamanhoElitismo) {
 }
 
 function botaoClicado() {
-  const tamanhoC = 42
   const tamanhoPop = parseInt(document.getElementById("tamanhoPop").value)
   const probCruzamento =
     parseInt(document.getElementById("probCruzamento").value) / 100
   const doisPontos = document.getElementById("doisPontos").checked
   const probMutacao =
     parseInt(document.getElementById("probMutacao").value) / 100
-  const qtGeracoes = parseInt(document.getElementById("qtGeracoes").value)
   const tipo = document.getElementById("tipo").value
   const tamanhoTorneio = parseInt(
     document.getElementById("tamanhoTorneio").value
@@ -296,11 +294,13 @@ function botaoClicado() {
     return
   }
 
-  var population = populacaoInicial(tamanhoPop, tamanhoC)
-
+  var population = populacaoInicial(tamanhoPop)
+  var geracao = 0
   // calcula aptidao
   for (let k = 0; k < population.length; k++) {
-    population[k].aptidao = aptidao(population[k].genes)
+    let apt = aptidao(population[k].genes, curso0, curso2)
+    population[k].aptidao = apt.valor
+    population[k].valido = apt.valido
   }
   var acumuladorApt = []
   acumuladorApt.push(getData(population, 0))
@@ -320,23 +320,12 @@ function botaoClicado() {
 
   var acumuladorMelhor = []
   acumuladorMelhor.push(melhorIndividuo)
-  atualizaTabela(melhorIndividuo)
 
-  for (let cont = 1; cont < qtGeracoes; cont++) {
+  do {
     var best = []
 
     // elitismo nesta parte!
     var elite = elitismo(population, tamanhoElitismo)
-    var melhorAgora = elitismo(population, 1)[0]
-
-    if (melhorAgora.aptidao > melhorIndividuo.aptidao) {
-      melhorIndividuo = melhorAgora
-      melhorIndividuo.geracaoEncontrado = cont
-      melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
-
-      atualizaTabela(melhorAgora)
-    }
-    acumuladorMelhor.push(melhorIndividuo)
 
     if (tipo == 1) {
       // seleciona melhores por roleta
@@ -353,29 +342,43 @@ function botaoClicado() {
       )
     }
     population = best
-
+    geracao++
     // calcula aptidao
     for (let k = 0; k < population.length; k++) {
-      population[k].aptidao = aptidao(population[k].genes)
+      let apt = aptidao(population[k].genes, curso0, curso2)
+      population[k].aptidao = apt.valor
+      population[k].valido = apt.valido
+      if (population[k].valido) {
+        atualizaTabela(population[k])
+        console.log(population[k])
+      }
     }
-    acumuladorApt.push(getData(population, cont))
+    acumuladorApt.push(getData(population, geracao))
 
-    /*const date = Date.now();
-    let currentDate = null;
-    do {
-      currentDate = Date.now();
-    } while (currentDate - date < 1000);*/
+    var melhorAgora = elitismo(population, 1)[0]
 
-    // poe na view
-    add += `Geracao ${cont}, individuos: `
+    if (melhorAgora.aptidao > melhorIndividuo.aptidao) {
+      melhorIndividuo = melhorAgora
+      melhorIndividuo.geracaoEncontrado = geracao
+      melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
+    }
+    acumuladorMelhor.push(melhorIndividuo)
+
+    // // poe na view
+    add += `Geracao ${geracao}, individuos: `
     for (k = 0; k < population.length; k++) {
       add += `
           <span title="${population[k].genes}">
-            ${population[k].aptidao};   
+            ${population[k].aptidao};
           </span>  `
     }
     add += `<br />`
-  }
+    if (geracao > 10000) {
+      alert("chegou na geracao 10000 limite, algoritmo parado!")
+      return
+    }
+  } while (!melhorIndividuo.valido)
+
   plotaAptidao(acumuladorApt)
   plotaMelhores(acumuladorMelhor)
   add += `populacao resultante: <br />`
@@ -415,9 +418,9 @@ function atualizaTabela(individuo) {
     document.getElementById("trTurno1").insertCell(-1).innerText =
       tabela[individuo.genes[3 * b]]
     document.getElementById("trTurno2").insertCell(-1).innerText =
-      tabela[individuo.genes[3 * b + 2]]
+      tabela[individuo.genes[3 * b + 1]]
     document.getElementById("trTurno3").insertCell(-1).innerText =
-      tabela[individuo.genes[3 * b + 4]]
+      tabela[individuo.genes[3 * b + 2]]
   }
 
   // logica de preencher quando for 42 genes:
@@ -435,7 +438,7 @@ function atualizaTabela(individuo) {
   // }
 }
 
-function plotaAptidao(dados, melhores) {
+function plotaAptidao(dados) {
   var data = []
   for (var a = 0; a < dados.length; a++) {
     data.push({
