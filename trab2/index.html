@@ -4,8 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Trabalho 1 -> maximo local com AG</title>
+    <title>Trabalho 2 -> Horário da Maternidade</title>
 
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-1.5.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.js" charset="utf-8"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -80,15 +83,24 @@
           type="number"
           name="tamanhoElitismo"
           id="tamanhoElitismo"
-          value="0"
+          value="1"
           placeholder="Tamanho do elitismo"
         />
+      </div>
+
+      <div class="campo">
+        <label for="curso0">1 e 2 Farão curso?</label>
+        <input type="checkbox" name="curso0" id="curso0" />
+      </div>
+      <div class="campo">
+        <label for="curso2">5 e 6 Farão curso?</label>
+        <input type="checkbox" name="curso2" id="curso2" />
       </div>
     </div>
     <button onclick="botaoClicado()">Go!</button>
 
     <div class="tabela">
-      <span>Tabela de turnos gerado</span>
+      <div class="navbar"><span>Resultado em tabela</span></div>
       <table>
         <tr>
           <th></th>
@@ -111,8 +123,13 @@
         </tr>
       </table>
     </div>
-    <div class="navbar"><span>Resultado em tabela</span></div>
+    <div class="wrapper">
+      <div id="chart2"></div>
+    </div>
 
+    <div class="wrapper">
+      <div id="chart"></div>
+    </div>
     <div id="log"></div>
 
     <script src="script.js"></script>

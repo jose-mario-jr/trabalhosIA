@@ -29,3 +29,14 @@
     --tamanho-linha: 2;
   }
 }
+
+tr td:first-child {
+    font-weight: bold;
+    border: none;
+
+}
+
+td {
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
