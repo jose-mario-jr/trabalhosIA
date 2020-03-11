@@ -29,36 +29,51 @@ function populacaoInicial(individuos = 10, genes = 21) {
 function aptidao(genes, curso0 = false, curso2 = false) {
   //aplicar regras de aptidao aqui!!
   var aptidao = 0
-  
+  var serveOuNao = true
   // regra 2: Cada profissional deve folgar 3 turnos antes de poder voltar ao trabalho
-  for(let z = 0; z<genes.length; z++){
-    for(let w = 1; w<4; w++){
-      if(genes[z] == genes[w]) aptidao--
-      else if(z<genes.length) aptidao++
+  for (let z = 0; z < genes.length; z++) {
+    for (let w = 1; w < 4; w++) {
+      if (genes[z] == genes[w]) {
+        aptidao -= 10
+        serveOuNao = false
+      }
+      else if (z < genes.length) aptidao++
     }
   }
 
   // regra 3: fazer checagem de curso para 1 e 2 e aptidão para este caso de folga de 6 turnos
-  if(curso0){
-    for(let z = 0; z<genes.length; z++){
+  if (curso0) {
+    for (let z = 0; z < genes.length; z++) {
       // o gene 0 corresponde a equipe de 1 e 2
-      if(genes[z] == 0 ){ 
-        for(let w = 1; w<7; w++){
-          if(genes[z] == genes[w]) aptidao--
-          else if(z<genes.length) aptidao++
+      if (genes[z] == 0) {
+        let curso0Valido = true
+        for (let w = 1; w < 7; w++) {
+          if (genes[z] == genes[w]) curso0Valido = false
+        }
+        if(curso0Valido) {
+          aptidao += 10
+          z = genes.length
+        } else {
+          serveOuNao = false
         }
       }
     }
   }
 
   // regra 4: fazer checagem de curso para 5 e 6 e aptidão para este caso de folga de 5 turnos
-  if(curso2){
-    for(let z = 0; z<genes.length; z++){
+  if (curso2) {
+    for (let z = 0; z < genes.length; z++) {
       // o gene 2 corresponde a equipe de 5 e 6
-      if(genes[z] == 2 ){ 
-        for(let w = 1; w<6; w++){
-          if(genes[z] == genes[w]) aptidao--
-          else if(z<genes.length) aptidao++
+      if (genes[z] == 2) {
+        let curso2Valido = true
+        for (let w = 1; w < 6; w++) {
+          if (genes[z] == genes[w]) curso2Valido = false
+        }
+        if(curso2Valido) {
+          aptidao += 10
+          z = genes.length
+        } else {
+          serveOuNao = false
         }
       }
     }
@@ -66,7 +81,9 @@ function aptidao(genes, curso0 = false, curso2 = false) {
 
   // regra 5: diferenca entre quantidade de turnos deve ser menor possivel
 
-  return aptidao
+  return {
+    valor: aptidao,
+    valido: serveOuNao
 }
 
 function operadorCruzamento(casal, probCruzamento, doisPontos = false) {
@@ -117,7 +134,7 @@ function operadorMutacao(popOld, probMutacao) {
     for (let j = 0; j < mutado[i].genes.length; j++) {
       let mutaOuNao = Math.random()
       if (mutaOuNao < probMutacao) {
-        mutado[i].genes[j] = Math.round(Math.random())
+        mutado[i].genes[j] = Math.floor(Math.random() * 5)
       }
     }
   }
@@ -300,7 +317,7 @@ function botaoClicado() {
   var melhorIndividuo = elitismo(population, 1)[0]
   melhorIndividuo.geracaoEncontrado = 0
   melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
-  
+
   var acumuladorMelhor = []
   acumuladorMelhor.push(melhorIndividuo)
   atualizaTabela(melhorIndividuo)
@@ -342,7 +359,7 @@ function botaoClicado() {
       population[k].aptidao = aptidao(population[k].genes)
     }
     acumuladorApt.push(getData(population, cont))
-    
+
     /*const date = Date.now();
     let currentDate = null;
     do {
@@ -387,23 +404,23 @@ function atualizaTabela(individuo) {
   trTurno3.insertCell(-1).innerText = "Turno 3 (22h – 6h)"
 
   const tabela = {
-    0: '1 e 2',
-    1: '3 e 4',
-    2: '5 e 6',
-    3: '7 e 8',
-    4: '9 e 10',
+    0: "1 e 2",
+    1: "3 e 4",
+    2: "5 e 6",
+    3: "7 e 8",
+    4: "9 e 10"
   }
-  //21 genes: 
+  //21 genes:
   for (let b = 0; b < 7; b++) {
-    document.getElementById("trTurno1").insertCell(-1).innerText = 
+    document.getElementById("trTurno1").insertCell(-1).innerText =
       tabela[individuo.genes[3 * b]]
-    document.getElementById("trTurno2").insertCell(-1).innerText = 
-      tabela[ individuo.genes[3 * b + 2] ]
-    document.getElementById("trTurno3").insertCell(-1).innerText = 
-      tabela[ individuo.genes[3 * b + 4] ]
+    document.getElementById("trTurno2").insertCell(-1).innerText =
+      tabela[individuo.genes[3 * b + 2]]
+    document.getElementById("trTurno3").insertCell(-1).innerText =
+      tabela[individuo.genes[3 * b + 4]]
   }
 
-  // logica de preencher quando for 42 genes: 
+  // logica de preencher quando for 42 genes:
 
   // for (let b = 0; b < 7; b++) {
   //   document.getElementById("trTurno1").insertCell(-1).innerText = `${
@@ -418,47 +435,49 @@ function atualizaTabela(individuo) {
   // }
 }
 
-function plotaAptidao(dados, melhores){
+function plotaAptidao(dados, melhores) {
   var data = []
-  for(var a = 0; a<dados.length; a++){
+  for (var a = 0; a < dados.length; a++) {
     data.push({
       x: dados[a].pontosX,
       y: dados[a].pontosY,
       name: `Geracao ${dados[a].geracao}`,
-      type: 'scatter'
+      type: "scatter"
     })
   }
   var layout = {
-    title: 'Aptidoes ao longo das gerações'
+    title: "Aptidoes ao longo das gerações"
   }
-  Plotly.newPlot('chart', data, layout);
+  Plotly.newPlot("chart", data, layout)
 }
 
-function plotaMelhores(acumulador){
+function plotaMelhores(acumulador) {
   let pontosX = []
   let pontosY = []
 
-  for(var a = 0; a<acumulador.length; a++){
+  for (var a = 0; a < acumulador.length; a++) {
     pontosX.push(acumulador[a].geracaoEncontrado)
     pontosY.push(acumulador[a].aptidao)
   }
 
-  var data = [{
-    x: pontosX,
-    y: pontosY,
-    mode: 'lines+markers',
-    name: `Melhores!`,
-    type: 'scatter',
-    line: {shape: 'hv'}
-  }]
+  var data = [
+    {
+      x: pontosX,
+      y: pontosY,
+      mode: "lines+markers",
+      name: `Melhores!`,
+      type: "scatter",
+      line: { shape: "hv" }
+    }
+  ]
   var layout = {
-    title: 'Melhores ao longo das gerações'
+    title: "Melhores ao longo das gerações"
   }
 
-  Plotly.newPlot('chart2', data, layout);
+  Plotly.newPlot("chart2", data, layout)
 }
 
-function getData(populacao, ger){
+function getData(populacao, ger) {
   var arr = {
     geracao: ger,
     pontosX: [],
@@ -470,5 +489,3 @@ function getData(populacao, ger){
   }
   return arr
 }
-
-
