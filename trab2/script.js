@@ -275,6 +275,8 @@ function elitismo(popOld, tamanhoElitismo) {
 }
 
 function botaoClicado() {
+  const tempo0 = Date.now()
+  const tempoLimite = parseInt(document.getElementById("tempoLimite").value)*1000
   const tamanhoPop = parseInt(document.getElementById("tamanhoPop").value)
   const probCruzamento =
     parseInt(document.getElementById("probCruzamento").value) / 100
@@ -306,15 +308,28 @@ function botaoClicado() {
 
   var population = populacaoInicial(tamanhoPop)
   var geracao = 0
+
+  var acumuladorApt = []
+  var horarioPerfeito = null
+
   // calcula aptidao
   for (let k = 0; k < population.length; k++) {
     let apt = aptidao(population[k].genes, curso0, curso2)
     population[k].aptidao = apt.valor
     population[k].valido = apt.valido
     population[k].turnosValidos = apt.turnosValidos
+    if (population[k].valido) {
+      acumuladorApt.push(getData(population, 0))
+      //atualizaTabela(population[k])
+      // alert(`Achou um individuo apto! 
+      //   Aptidao: ${population[k].aptidao}, 
+      //   geração encontrada = 0`)
+      if(population[k].turnosValidos){
+        horarioPerfeito = population[k]
+      }
+    }
   }
-  var acumuladorApt = []
-  acumuladorApt.push(getData(population, 0))
+
   var add = `Geracao 0, individuos: `
   for (k = 0; k < population.length; k++) {
     add += `
@@ -324,10 +339,8 @@ function botaoClicado() {
   }
   add += `<br />`
 
-  maiorGlobal = 120
   var melhorIndividuo = elitismo(population, 1)[0]
   melhorIndividuo.geracaoEncontrado = 0
-  melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
 
   var acumuladorMelhor = []
   acumuladorMelhor.push(melhorIndividuo)
@@ -360,24 +373,33 @@ function botaoClicado() {
       population[k].aptidao = apt.valor
       population[k].valido = apt.valido
       population[k].turnosValidos = apt.turnosValidos
-      if (population[k].valido) {
-        atualizaTabela(population[k])
-        alert(`Achou um individuo apto! 
-          Aptidao: ${population[k].aptidao}, 
-          geração encontrada = ${geracao}`)
-        console.log(population[k])
+      if (population[k].valido && population[k].turnosValidos) {
+        horarioPerfeito = population[k]
+        horarioPerfeito.geracaoEncontrado = geracao
+        console.log("Horario perfeito: ",horarioPerfeito)
+        break;
       }
+      if (population[k].aptidao > melhorIndividuo.aptidao ) { 
+        melhorIndividuo = population[k]
+        melhorIndividuo.geracaoEncontrado = geracao
+      } 
     }
     acumuladorApt.push(getData(population, geracao))
-
-    var melhorAgora = elitismo(population, 1)[0]
-
-    if (melhorAgora.aptidao > melhorIndividuo.aptidao) {
-      melhorIndividuo = melhorAgora
-      melhorIndividuo.geracaoEncontrado = geracao
-      melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
-    }
     acumuladorMelhor.push(melhorIndividuo)
+
+    // var melhorAgora = elitismo(population, 1)[0]
+
+    // if (melhorAgora.aptidao > melhorIndividuo.aptidao ) {      
+    //   if (melhorAgora.valido) {
+    //     melhorIndividuo = melhorAgora
+    //     melhorIndividuo.geracaoEncontrado = geracao
+    //     if(melhorAgora.turnosValidos){
+    //       //atualizaTabela(melhorIndividuo)
+    //       horarioPerfeito = melhorIndividuo
+
+    //     }
+    //   }
+    // }
 
     // // poe na view
     add += `Geracao ${geracao}, individuos: `
@@ -388,11 +410,16 @@ function botaoClicado() {
           </span>  `
     }
     add += `<br />`
-    if (geracao > 10000) {
-      alert("chegou na geracao 10000 limite, algoritmo parado!")
+    if (geracao > 100000) {
+      alert("chegou na geracao 100000 limite, algoritmo parado!")
       return
     }
-  } while (!melhorIndividuo.valido && !melhorIndividuo.turnosValidos)
+
+    if(Date.now()-tempo0 >tempoLimite ){
+      alert("Chegou no tempo limite, algoritmo parado!")
+      return
+    }
+  } while (!horarioPerfeito)
   plotaAptidao(acumuladorApt)
   plotaMelhores(acumuladorMelhor)
   add += `populacao resultante: <br />`
@@ -401,10 +428,11 @@ function botaoClicado() {
   }
   document.getElementById("log").innerHTML = add
 
-  atualizaTabela(melhorIndividuo)
+  atualizaTabela(horarioPerfeito)
   alert(`Achado o individuo perfeito!
-    Aptidao: ${melhorIndividuo.aptidao}, 
-    geração encontrada = ${melhorIndividuo.geracaoEncontrado}`)
+    Aptidao: ${horarioPerfeito.aptidao}, 
+    Geração encontrada = ${horarioPerfeito.geracaoEncontrado}
+    Tempo: ${(Date.now()-tempo0)/1000} s`)
 }
 
 function atualizaTabela(individuo) {
