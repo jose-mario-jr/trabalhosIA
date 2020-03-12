@@ -79,10 +79,20 @@ function aptidao(genes, curso0 = false, curso2 = false) {
   }
 
   // regra 5: diferenca entre quantidade de turnos deve ser menor possivel
-
+  var turnosEquipe = [0, 0, 0, 0, 0]
+  var turnosValidos = true
+  for (let z = 0; z < genes.length; z++) {
+    turnosEquipe[genes[z]]++
+  }
+  for (p = 0; p < turnosEquipe.length; p++) {
+    if (turnosEquipe[p] != 5 && turnosEquipe[p] != 4) {
+      turnosValidos = false
+    }
+  }
   return {
     valor: aptidao,
-    valido: serveOuNao
+    valido: serveOuNao,
+    turnosValidos: turnosValidos
   }
 }
 
@@ -301,6 +311,7 @@ function botaoClicado() {
     let apt = aptidao(population[k].genes, curso0, curso2)
     population[k].aptidao = apt.valor
     population[k].valido = apt.valido
+    population[k].turnosValidos = apt.turnosValidos
   }
   var acumuladorApt = []
   acumuladorApt.push(getData(population, 0))
@@ -348,8 +359,12 @@ function botaoClicado() {
       let apt = aptidao(population[k].genes, curso0, curso2)
       population[k].aptidao = apt.valor
       population[k].valido = apt.valido
+      population[k].turnosValidos = apt.turnosValidos
       if (population[k].valido) {
         atualizaTabela(population[k])
+        alert(`Achou um individuo apto! 
+          Aptidao: ${population[k].aptidao}, 
+          geração encontrada = ${geracao}`)
         console.log(population[k])
       }
     }
@@ -377,8 +392,7 @@ function botaoClicado() {
       alert("chegou na geracao 10000 limite, algoritmo parado!")
       return
     }
-  } while (!melhorIndividuo.valido)
-
+  } while (!melhorIndividuo.valido && !melhorIndividuo.turnosValidos)
   plotaAptidao(acumuladorApt)
   plotaMelhores(acumuladorMelhor)
   add += `populacao resultante: <br />`
@@ -387,7 +401,9 @@ function botaoClicado() {
   }
   document.getElementById("log").innerHTML = add
 
-  alert(`Aptidao: ${melhorIndividuo.aptidao}, 
+  atualizaTabela(melhorIndividuo)
+  alert(`Achado o individuo perfeito!
+    Aptidao: ${melhorIndividuo.aptidao}, 
     geração encontrada = ${melhorIndividuo.geracaoEncontrado}`)
 }
 
