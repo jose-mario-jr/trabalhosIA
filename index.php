@@ -26,7 +26,7 @@
     <h1>Trabahlos IA - Professor José Ricardo</h1>
 
     <a href="trab1">Ir para Trab1</a>
-    <a href="trab2">Ir para Trab2</a>
+    <a href="trab2/trabalho2.html">Ir para Trab2</a>
 
     
   </body>
