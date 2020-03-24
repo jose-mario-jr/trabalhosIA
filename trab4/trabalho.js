@@ -22,6 +22,13 @@ const tabelaDistancias = [
 	[61 ,168,116,272,172,186,200,304,204,192,120,128,110,93 ,112,33 ,101,24 ,0  ,193],
 	[138,150,252,375,304,262,188,151,69 ,52 ,100,66 ,267,229,217,166,170,211,193,0  ],
 ]
+const tabelaCidades = [
+	'Uberaba', 'Uberlândia', 'Araxá', 'Patos de Minas', 
+	'Patrocínio', 'Monte Carmelo', 'Araguari', 'Ituiutaba', 
+	'Prata', 'Frutal', 'Conceição das Alagoas', 'Campo Florido', 
+	'Perdizes', 'Santa Juliana', 'Nova Ponte', 'Delta', 
+	'Água Comprida', 'Sacramento', 'Conquista', 'Comendador Gomes', 
+]
 
 //gera populacao inicial
 function populacaoInicial(individuos = 10, genes = 20) {
@@ -87,18 +94,20 @@ function operadorCruzamento(casal, probCruzamento) {
       filhos[1].genes.push(casal[1].genes[index]);
       filhos[0].genes.push(casal[0].genes[index]);
     }
-
-	for(let i = 1; i<filhos[0].genes.length-1; i++){
-	  for(let j = i; j<filhos[0].genes.length-1; j++){
-		if(filhos[0].genes[i] == filhos[0].genes[j]){ // se entra aqui, quer dizer que repetiu algum
-		  for(let k = 1; k<filhos[0].genes.length-1; k++){
-			if(!filhos[0].genes.includes(k)){ // quer dizer que este é o que foi excluido pelo cruzamento
-			  filhos[0].genes[i] = k
-			}
+	
+	for(let a=0; a<filhos.length; a++){
+      for(let i = 1; i<filhos[a].genes.length-1; i++){
+	    for(let j = i; j<filhos[a].genes.length-1; j++){
+		  if(filhos[a].genes[i] == filhos[a].genes[j]){ // se entra aqui, quer dizer que repetiu algum
+		    for(let k = 1; k<filhos[a].genes.length-1; k++){
+			  if(!filhos[a].genes.includes(k)){ // quer dizer que este é o que foi excluido pelo cruzamento
+			    filhos[a].genes[i] = k
+			  }
+		    }
 		  }
-		}
+	    }
 	  }
-	}
+    }
     // console.log("casal: ", casal)
     // console.log("filhos: ", filhos)
     return filhos;
@@ -286,7 +295,7 @@ function botaoClicado() {
   for (let k = 0; k < population.length; k++) {
     population[k].aptidao = aptidao(population[k].genes);
   }
-  console.log(population)
+
 
   var add = `Geracao 0, individuos: `;
   for (k = 0; k < population.length; k++) {
@@ -357,9 +366,18 @@ function botaoClicado() {
   }
   document.getElementById("log").innerHTML = add;
 
-  alert(`Achado o individuo perfeito!
+  alert(`Melhor Individuo:
     Aptidao: ${melhorIndividuo.aptidao}, 
-    Geração encontrada = ${melhorIndividuo.geracaoEncontrado}
-    Tempo: ${(Date.now() - tempo0) / 1000} s`);
+    Geração encontrada: ${melhorIndividuo.geracaoEncontrado}
+    Tempo total: ${(Date.now() - tempo0) / 1000} s
+    caminho encontrado: ${cidadesToString(melhorIndividuo.genes)}`);
+}
+
+function cidadesToString(genes){
+  lista = []
+  for(let i = 0; i<genes.length; i++){
+    lista.push(tabelaCidades[genes[i]])
+  }	
+  return lista
 }
 
