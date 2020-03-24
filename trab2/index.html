@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <title>Trabalhos - Inteligência Artificial</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Trabalho 1 -> maximo local com AG</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-1.5.0.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.js" charset="utf-8"></script>
-    <!-- Bootstrap core CSS -->
+
+	<!-- Bootstrap core CSS -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -18,8 +17,8 @@
       crossorigin="anonymous"
     />
     <meta name="theme-color" content="#563d7c" />
-
-    <style>
+	
+	<style>
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -35,10 +34,10 @@
         }
       }
     </style>
-    <link href="../estilo.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+	<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"
         >Inteligência Artificial - Engenharia de Computação</a
       >
@@ -54,234 +53,115 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link active" href="#">
                   <span data-feather="chevron-right"></span>
-                  Trabalho 1
+                  Trabalho 2
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="#">
                   <span data-feather="chevron-right"></span>
-                  Trabalho 2 <span class="sr-only">(current)</span>
+                  Trabalho 3 <span class="sr-only">(current)</span>
                 </a>
               </li>
             </ul>
           </div>
         </nav>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <h1 class="pt-3">Parâmetros</h1>
-          <div class="form">
-            <div class="form-row">
-              <div class="form-group col-md-3">
-                <label for="tamanhoPop">Tamanho da População</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="tamanhoPop"
-                  value="10"
-                />
-              </div>
-              <div class="form-group col-md-3">
-                <label for="probCruzamento"
-                  >Probabilidade de Cruzamento (%)</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="probCruzamento"
-                  value="95"
-                />
-              </div>
-              <div class="form-group col-md-3">
-                <label for="probMutacao">Probabilidade de Mutação (%)</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="probMutacao"
-                  value="10"
-                />
-              </div>
-              <div class="form-group col-md-3">
-                <label for="tamanhoElitismo">Tamanho do Elitismo</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="tamanhoElitismo"
-                  value="1"
-                />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-3">
-                <label for="tipo">Tipo de Seleção</label>
-                <select id="tipo" name="tipo" class="form-control">
-                  <option value="0" selected>Escolha...</option>
-                  <option value="1">Roleta</option>
-                  <option value="2">Torneio</option>
-                </select>
-              </div>
-              <div class="form-group col-md-3">
-                <label for="tamanhoTorneio">Tamanho do Torneio</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="tamanhoTorneio"
-                  value="4"
-                />
-              </div>
-              <div class="form-group col-md-2">
-                <label>Tipo de Cruzamento</label>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tipoCruzamento"
-                    id="umPonto"
-                    value="umPonto"
-                    checked
-                  />
-                  <label class="form-check-label" for="umPonto">
-                    1 Ponto
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tipoCruzamento"
-                    id="doisPontos"
-                    value="doisPontos"
-                  />
-                  <label class="form-check-label" for="doisPontos">
-                    2 Pontos
-                  </label>
-                </div>
-              </div>
-              <div class="form-group col-md-2">
-                <label for="Particularidades">Particularidades</label>
-                <div class="particularidades">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="curso0"
-                      value="curso0"
-                      name="curso0"
-                    />
-                    <label class="form-check-label" for="curso0"
-                      >1 e 2 farão curso.</label
-                    >
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="curso2"
-                      value="curso2"
-                      name="curso2"
-                    />
-                    <label class="form-check-label" for="curso2"
-                      >5 e 6 farão curso.</label
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-md-2">
-                <label for="tempoLimite">Tempo limite (s)</label>
-                <input
-                  class="form-control"
-                  type="number"
-                  name="tempoLimite"
-                  id="tempoLimite"
-                  value="30"
-                />
-              </div>
-            </div>
-            <button onclick="botaoClicado()" class="btn btn-primary">
-              Calcular
-            </button>
-          </div>
-          <h2 class="pt-5">Resultados</h2>
-          <div class="table-responsive">
-            <table class="table table-striped table-sm">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Segunda</th>
-                  <th>Terça</th>
-                  <th>Quarta</th>
-                  <th>Quinta</th>
-                  <th>Sexta</th>
-                  <th>Sábado</th>
-                  <th>Domingo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr id="trTurno1">
-                  <td>Turno 1 (6h – 14h)</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr id="trTurno2">
-                  <td>Turno 2 (14h – 22h)</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr id="trTurno3">
-                  <td>Turno 3 (22h – 6h)</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div id="chart2"></div>
-          <div id="chart"></div>
-          <h5>Log</h5>
-          <div class="text-nowrap" id="log"></div>
-          <!-- <canvas
-            class="my-4 w-100"
-            id="myChart"
-            width="900"
-            height="380"
-          ></canvas> -->
-        </main>
+    <div class="form">
+      <div class="campo">
+        <label for="tamanhoC">Tamanho do cromossomo:</label>
+        <input
+          type="number"
+          name="tamanhoC"
+          id="tamanhoC"
+          value="8"
+          placeholder="tamanho do cromossomo"
+        />
+      </div>
+      <div class="campo">
+        <label for="tamanhoPop">tamanho da população: </label>
+        <input
+          type="number"
+          name="tamanhoPop"
+          id="tamanhoPop"
+          value="10"
+          placeholder="tamanho da população"
+        />
+      </div>
+      <div class="campo">
+        <label for="probCruzamento">Prob de cruzamento (%)</label>
+        <input
+          type="number"
+          name="probCruzamento"
+          id="probCruzamento"
+          value="95"
+          placeholder="Prob de cruzamento"
+        />
+      </div>
+      <div class="campo">
+        <label for="doisPontos">Cruzamento de dois pontos?</label>
+        <input type="checkbox" name="doisPontos" id="doisPontos" />
+      </div>
+      <div class="campo">
+        <label for="probMutacao">Prob de Mutação (%)</label>
+        <input
+          type="number"
+          name="probMutacao"
+          id="probMutacao"
+          value="10"
+          placeholder="Prob de Mutação"
+        />
+      </div>
+      <div class="campo">
+        <label for="qtGeracoes">Qt. de gerações</label>
+        <input
+          type="number"
+          name="qtGeracoes"
+          id="qtGeracoes"
+          value="10"
+          placeholder="Qt. de gerações"
+        />
+      </div>
+      <div class="campo">
+        <label for="tipo">Tipo de seleção</label>
+
+        <select name="tipo" id="tipo">
+          <option value="1">Roleta</option>
+          <option value="2">Torneio</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="tamanhoTorneio">Tamanho do torneio</label>
+        <input
+          type="number"
+          name="tamanhoTorneio"
+          id="tamanhoTorneio"
+          value="4"
+          placeholder="Tamanho do torneio"
+        />
+      </div>
+
+      <div class="campo">
+        <label for="tamanhoElitismo">Tamanho do elitismo</label>
+        <input
+          type="number"
+          name="tamanhoElitismo"
+          id="tamanhoElitismo"
+          value="0"
+          placeholder="Tamanho do elitismo"
+        />
       </div>
     </div>
-    <script src="trabalho2.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <!-- <script src="layout.js"></script> -->
+    <button onclick="botaoClicado()">Go!</button>
+
+    <div class="navbar"><span>Resultado em gráfico</span></div>
+    <div class="wrapper">
+      <div id="chart"></div>
+    </div>
+    <div id="log"></div>
+
+    <script src="script.js"></script>
   </body>
 </html>
