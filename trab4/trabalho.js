@@ -22,12 +22,28 @@ const tabelaDistancias = [
 	[61 ,168,116,272,172,186,200,304,204,192,120,128,110,93 ,112,33 ,101,24 ,0  ,193],
 	[138,150,252,375,304,262,188,151,69 ,52 ,100,66 ,267,229,217,166,170,211,193,0  ],
 ]
+// tabela e indice, nome, urlMaps
 const tabelaCidades = [
-	'Uberaba', 'Uberlândia', 'Araxá', 'Patos de Minas', 
-	'Patrocínio', 'Monte Carmelo', 'Araguari', 'Ituiutaba', 
-	'Prata', 'Frutal', 'Conceição das Alagoas', 'Campo Florido', 
-	'Perdizes', 'Santa Juliana', 'Nova Ponte', 'Delta', 
-	'Água Comprida', 'Sacramento', 'Conquista', 'Comendador Gomes', 
+	['Uberaba', 'Uberaba,+MG'],
+	['Uberlândia', 'Uberl%C3%A2ndia,+MG'],
+	['Araxá', 'Arax%C3%A1,+MG'],
+	['Patos de Minas', 'Patos+de+Minas,+Minas+Gerais'],
+	['Patrocínio', 'Patroc%C3%ADnio,+MG'],
+	['Monte Carmelo', 'Monte+Carmelo,+MG'],
+	['Araguari', 'Araguari,+State+of+Minas+Gerais'],
+	['Ituiutaba', 'Ituiutaba,+MG'], 
+	['Prata', 'Prata+-+State+of+Minas+Gerais'],
+	['Frutal', 'Frutal+-+State+of+Minas+Gerais'],
+	['Conceição das Alagoas', 'Concei%C3%A7%C3%A3o+das+Alagoas,+MG,+38120-000'],
+	['Campo Florido', 'Campo+Florido,+State+of+Minas+Gerais'],
+	['Perdizes', 'Perdizes,+MG,+38170-000'],
+	['Santa Juliana', 'Santa+Juliana,+MG'],
+	['Nova Ponte', 'Nova+Ponte,+State+of+Minas+Gerais'],
+	['Delta', 'Delta,+MG'],
+	['Água Comprida', '%C3%81gua+Comprida,+MG'], 
+	['Sacramento', 'Sacramento+-+State+of+Minas+Gerais'],
+	['Conquista', 'Conquista,+MG'],
+	['Comendador Gomes', 'Comendador+Gomes,+MG'],
 ]
 
 //gera populacao inicial
@@ -360,6 +376,9 @@ function botaoClicado() {
       return;
     }
   } while (geracao < geracoesLimite)
+
+  atualizaMapa(melhorIndividuo.genes);
+
   add += `populacao resultante: <br />`;
   for (k = 0; k < population.length; k++) {
     add += `${population[k].genes} -> ${population[k].aptidao} <br/>`;
@@ -370,14 +389,40 @@ function botaoClicado() {
     Aptidao: ${melhorIndividuo.aptidao}, 
     Geração encontrada: ${melhorIndividuo.geracaoEncontrado}
     Tempo total: ${(Date.now() - tempo0) / 1000} s
-    caminho encontrado: ${cidadesToString(melhorIndividuo.genes)}`);
+    caminho encontrado: ${cidadesToString(melhorIndividuo.genes, 0)}`);
 }
 
-function cidadesToString(genes){
+function cidadesToString(genes, indice){
   lista = []
   for(let i = 0; i<genes.length; i++){
-    lista.push(tabelaCidades[genes[i]])
+    lista.push(tabelaCidades[genes[i]][indice])
   }	
   return lista
 }
+
+function atualizaMapa(genes) {
+  let listaUris = cidadesToString(genes, 1)
+  let uriSrc = 'https://www.google.com/maps/dir/'
+  for(let i = 0; i<listaUris.length; i++){
+    uriSrc += `${listaUris[i]}/` 
+  }
+
+  linkMapa = document.getElementById('linkMapa')
+  linkMapa.setAttribute('href', uriSrc)
+  linkMapa.removeAttribute('hidden')
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
