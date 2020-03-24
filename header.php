@@ -54,15 +54,21 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="../trab2">
                   <span data-feather="chevron-right"></span>
-                  Trabalho 1
+                  Trabalho 2
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link" href="../trab3">
                   <span data-feather="chevron-right"></span>
-                  Trabalho 2 <span class="sr-only">(current)</span>
+                  Trabalho 3
+                </a>
+              </li>
+			  <li class="nav-item">
+                <a class="nav-link" href="../trab4">
+                  <span data-feather="chevron-right"></span>
+                  Trabalho 4
                 </a>
               </li>
             </ul>
@@ -70,218 +76,3 @@
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <h1 class="pt-3">Parâmetros</h1>
-          <div class="form">
-            <div class="form-row">
-              <div class="form-group col-md-3">
-                <label for="tamanhoPop">Tamanho da População</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="tamanhoPop"
-                  value="10"
-                />
-              </div>
-              <div class="form-group col-md-3">
-                <label for="probCruzamento"
-                  >Probabilidade de Cruzamento (%)</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="probCruzamento"
-                  value="95"
-                />
-              </div>
-              <div class="form-group col-md-3">
-                <label for="probMutacao">Probabilidade de Mutação (%)</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="probMutacao"
-                  value="10"
-                />
-              </div>
-              <div class="form-group col-md-3">
-                <label for="tamanhoElitismo">Tamanho do Elitismo</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="tamanhoElitismo"
-                  value="1"
-                />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-3">
-                <label for="tipo">Tipo de Seleção</label>
-                <select id="tipo" name="tipo" class="form-control">
-                  <option value="0" selected>Escolha...</option>
-                  <option value="1">Roleta</option>
-                  <option value="2">Torneio</option>
-                </select>
-              </div>
-              <div class="form-group col-md-3">
-                <label for="tamanhoTorneio">Tamanho do Torneio</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="tamanhoTorneio"
-                  value="4"
-                />
-              </div>
-              <div class="form-group col-md-2">
-                <label>Tipo de Cruzamento</label>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tipoCruzamento"
-                    id="umPonto"
-                    value="umPonto"
-                    checked
-                  />
-                  <label class="form-check-label" for="umPonto">
-                    1 Ponto
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="tipoCruzamento"
-                    id="doisPontos"
-                    value="doisPontos"
-                  />
-                  <label class="form-check-label" for="doisPontos">
-                    2 Pontos
-                  </label>
-                </div>
-              </div>
-              <div class="form-group col-md-2">
-                <label for="Particularidades">Particularidades</label>
-                <div class="particularidades">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="curso0"
-                      value="curso0"
-                      name="curso0"
-                    />
-                    <label class="form-check-label" for="curso0"
-                      >1 e 2 farão curso.</label
-                    >
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="curso2"
-                      value="curso2"
-                      name="curso2"
-                    />
-                    <label class="form-check-label" for="curso2"
-                      >5 e 6 farão curso.</label
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-md-2">
-                <label for="tempoLimite">Tempo limite (s)</label>
-                <input
-                  class="form-control"
-                  type="number"
-                  name="tempoLimite"
-                  id="tempoLimite"
-                  value="30"
-                />
-              </div>
-            </div>
-            <button onclick="botaoClicado()" class="btn btn-primary">
-              Calcular
-            </button>
-          </div>
-          <h2 class="pt-5">Resultados</h2>
-          <div class="table-responsive">
-            <table class="table table-striped table-sm">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Segunda</th>
-                  <th>Terça</th>
-                  <th>Quarta</th>
-                  <th>Quinta</th>
-                  <th>Sexta</th>
-                  <th>Sábado</th>
-                  <th>Domingo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr id="trTurno1">
-                  <td>Turno 1 (6h – 14h)</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr id="trTurno2">
-                  <td>Turno 2 (14h – 22h)</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr id="trTurno3">
-                  <td>Turno 3 (22h – 6h)</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div id="chart2"></div>
-          <div id="chart"></div>
-          <h5>Log</h5>
-          <div class="text-nowrap" id="log"></div>
-          <!-- <canvas
-            class="my-4 w-100"
-            id="myChart"
-            width="900"
-            height="380"
-          ></canvas> -->
-        </main>
-      </div>
-    </div>
-    <script src="trabalho2.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <!-- <script src="layout.js"></script> -->
-  </body>
-</html>

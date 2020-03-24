@@ -14,12 +14,17 @@ function populacaoInicial(individuos = 10, genes = 21) {
   var pop = [];
   for (i = 0; i < individuos; i++) {
     var cromossomo = {
-      genes: []
+      genes: [0]
     };
     // popula cada cromossomo com 21 genes de 0 a 4
-    for (j = 0; j < genes; j++) {
-      cromossomo.genes.push(Math.floor(Math.random() * 5));
+    for (j = 1; j < genes; j++) {
+	  do {
+	  	var escolhido = Math.floor(Math.random() * 20 + 1) // escolhe de 1 a 20
+	  } while(cromossomo.genes.includes(escolhido))
+      cromossomo.genes.push(escolhido);
     }
+	cromossomo.genes.push(0)
+	console.log(cromossomo)
     pop.push(cromossomo);
   }
   return pop;
@@ -276,13 +281,14 @@ function elitismo(popOld, tamanhoElitismo) {
 
 function botaoClicado() {
   const tempo0 = Date.now();
+  const geracoesLimite =
+    parseInt(document.getElementById("geracoesLimite").value);
   const tempoLimite =
     parseInt(document.getElementById("tempoLimite").value) * 1000;
   const tamanhoPop = parseInt(document.getElementById("tamanhoPop").value);
   const probCruzamento =
     parseInt(document.getElementById("probCruzamento").value) / 100;
-  const doisPontos = document.getElementsByName("tipoCruzamento").item(1)
-    .checked;
+
   const probMutacao =
     parseInt(document.getElementById("probMutacao").value) / 100;
   const tipo = document.getElementById("tipo").value;
@@ -292,9 +298,6 @@ function botaoClicado() {
   const tamanhoElitismo = parseInt(
     document.getElementById("tamanhoElitismo").value
   );
-
-  const curso0 = document.getElementById("curso0").checked;
-  const curso2 = document.getElementById("curso2").checked;
 
   // validacoes
   if (tamanhoTorneio > tamanhoPop) {
@@ -437,104 +440,3 @@ function botaoClicado() {
     Tempo: ${(Date.now() - tempo0) / 1000} s`);
 }
 
-function atualizaTabela(individuo) {
-  trTurno1 = document.getElementById("trTurno1");
-  trTurno2 = document.getElementById("trTurno2");
-  trTurno3 = document.getElementById("trTurno3");
-
-  // tira todo o texto das colunas
-  trTurno1.innerHTML = "";
-  trTurno2.innerHTML = "";
-  trTurno3.innerHTML = "";
-
-  // coloca cabecalho
-  trTurno1.insertCell(-1).innerText = "Turno 1 (6h – 14h)";
-  trTurno2.insertCell(-1).innerText = "Turno 2 (14h – 22h)";
-  trTurno3.insertCell(-1).innerText = "Turno 3 (22h – 6h)";
-
-  const tabela = {
-    0: "1 e 2",
-    1: "3 e 4",
-    2: "5 e 6",
-    3: "7 e 8",
-    4: "9 e 10"
-  };
-  //21 genes:
-  for (let b = 0; b < 7; b++) {
-    document.getElementById("trTurno1").insertCell(-1).innerText =
-      tabela[individuo.genes[3 * b]];
-    document.getElementById("trTurno2").insertCell(-1).innerText =
-      tabela[individuo.genes[3 * b + 1]];
-    document.getElementById("trTurno3").insertCell(-1).innerText =
-      tabela[individuo.genes[3 * b + 2]];
-  }
-
-  // logica de preencher quando for 42 genes:
-
-  // for (let b = 0; b < 7; b++) {
-  //   document.getElementById("trTurno1").insertCell(-1).innerText = `${
-  //     individuo.genes[6 * b]
-  //   } e ${individuo.genes[6 * b + 1]}`
-  //   document.getElementById("trTurno2").insertCell(-1).innerText = `${
-  //     individuo.genes[6 * b + 2]
-  //   } e ${individuo.genes[6 * b + 3]}`
-  //   document.getElementById("trTurno3").insertCell(-1).innerText = `${
-  //     individuo.genes[6 * b + 4]
-  //   } e ${individuo.genes[6 * b + 5]}`
-  // }
-}
-
-function plotaAptidao(dados) {
-  var data = [];
-  for (var a = 0; a < dados.length; a++) {
-    data.push({
-      x: dados[a].pontosX,
-      y: dados[a].pontosY,
-      name: `Geracao ${dados[a].geracao}`,
-      type: "scatter"
-    });
-  }
-  var layout = {
-    title: "Aptidoes ao longo das gerações"
-  };
-  Plotly.newPlot("chart", data, layout);
-}
-
-function plotaMelhores(acumulador) {
-  let pontosX = [];
-  let pontosY = [];
-
-  for (var a = 0; a < acumulador.length; a++) {
-    pontosX.push(acumulador[a].geracaoEncontrado);
-    pontosY.push(acumulador[a].aptidao);
-  }
-
-  var data = [
-    {
-      x: pontosX,
-      y: pontosY,
-      mode: "lines+markers",
-      name: `Melhores!`,
-      type: "scatter",
-      line: { shape: "hv" }
-    }
-  ];
-  var layout = {
-    title: "Melhores ao longo das gerações"
-  };
-
-  Plotly.newPlot("chart2", data, layout);
-}
-
-function getData(populacao, ger) {
-  var arr = {
-    geracao: ger,
-    pontosX: [],
-    pontosY: []
-  };
-  for (let i = 0; i < populacao.length; i++) {
-    arr.pontosX.push(i);
-    arr.pontosY.push(populacao[i].aptidao);
-  }
-  return arr;
-}
