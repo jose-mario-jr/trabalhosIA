@@ -36,11 +36,11 @@ const tabelaCidades = [
     { lat: -18.585096, lng: -46.523466 }
   ],
   ["Patrocínio", "Patroc%C3%ADnio,+MG", { lat: -18.937587, lng: -46.993695 }],
-  ["Monte Carmelo", "Monte+Carmelo,+MG", { lat: -19.748411, lng: -47.938547 }],
+  ["Monte Carmelo", "Monte+Carmelo,+MG", { lat: -18.730312, lng: -47.491855 }],
   [
     "Araguari",
     "Araguari,+State+of+Minas+Gerais",
-    { lat: -18.731312, lng: -47.491661 }
+    { lat: -18.6446642, lng: -48.1968341 }
   ],
   ["Ituiutaba", "Ituiutaba,+MG", { lat: -18.974936, lng: -49.45978 }],
   [
