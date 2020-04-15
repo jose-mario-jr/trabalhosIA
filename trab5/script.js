@@ -21,11 +21,12 @@ function aptidao(cromossomo) {
   let x = cromossomo.x
   let y = cromossomo.y
 
-  let fit =
+  let fit = -(
     15 +
     (x - 3) ** 2 / 2 +
     (y - 3) ** 2 / 2 -
     2 * (Math.sin(4 * x - 3) + Math.sin(4 * y - 3))
+  )
 
   return fit
 }
@@ -81,14 +82,25 @@ function operadorCruzamento(casal, probCruzamento, tipoCruzamento) {
   }
 }
 
-function operadorMutacao(popOld, probMutacao) {
+function operadorMutacao(
+  popOld,
+  probMutacao,
+  a1 = -10,
+  b1 = 12,
+  a2 = -10,
+  b2 = 12
+) {
   let mutado = popOld
   for (let i = 0; i < mutado.length; i++) {
+    // para gene x
     let mutaOuNao = Math.random()
     if (mutaOuNao < probMutacao) {
-      qualGene = Math.round(Math.random())
-      //corrigir, pode ser que ele vá mutar ambos genes!!!
-      mutado[i].genes[j] = Math.round(Math.random())
+      mutado[i].x = a1 + Math.random() * (b1 - a1)
+    }
+    // para gene y
+    mutaOuNao = Math.random()
+    if (mutaOuNao < probMutacao) {
+      mutado[i].y = a2 + Math.random() * (b2 - a2)
     }
   }
   return mutado
@@ -256,9 +268,10 @@ function botaoClicado() {
   }
 
   var population = populacaoInicial(tamanhoPop)
+  console.log({ population })
   // calcula aptidao
   for (let k = 0; k < population.length; k++) {
-    population[k].aptidao = aptidao(population[k]).toFixed(5)
+    population[k].aptidao = parseFloat(aptidao(population[k]).toFixed(5))
   }
   let add = `Geracao 0, individuos: `
   for (k = 0; k < population.length; k++) {
@@ -315,7 +328,7 @@ function botaoClicado() {
     // calcula aptidao
     for (let k = 0; k < population.length; k++) {
       var apt = aptidao(population[k])
-      population[k].aptidao = aptidao(population[k]).toFixed(5)
+      population[k].aptidao = parseFloat(aptidao(population[k]).toFixed(5))
     }
 
     acumuladorPlot.push(getData(population, cont))
@@ -337,7 +350,7 @@ function botaoClicado() {
   }
   document.getElementById("log").innerHTML = add
 
-  alert(`Aptidao: ${melhorIndividuo.aptidao}, 
+  alert(`Aptidao: ${-melhorIndividuo.aptidao}, 
     x = ${melhorIndividuo.x}, 
     y = ${melhorIndividuo.y}, 
     erro = ${(melhorIndividuo.erro * 100).toFixed(2)}%,
@@ -362,7 +375,7 @@ function plot(acumuladorPlot) {
     scene: {
       xaxis: { range: [-10, 12] },
       yaxis: { range: [-10, 12] },
-      zaxis: { range: [0, 300] },
+      zaxis: { range: [0, 200] },
     },
     height: 750,
   }
@@ -380,10 +393,10 @@ function getData(populacao, ger) {
     geracao: ger,
     dados: [[], [], []],
   }
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < populacao.length; i++) {
     arr.dados[0].push(populacao[i].x)
     arr.dados[1].push(populacao[i].y)
-    arr.dados[2].push(populacao[i].aptidao)
+    arr.dados[2].push(-populacao[i].aptidao)
   }
   return arr
 }
