@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Trabalho 5 -> maximo local com AG e Cromossomos Reais</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-1.5.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.js" charset="utf-8"></script>
+
+	<!-- Bootstrap core CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <meta name="theme-color" content="#563d7c" />
+	
+	<style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+	<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"
+        >Inteligência Artificial - Engenharia de Computação</a
+      >
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="#">Sobre</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  <span data-feather="chevron-right"></span>
+                  Trabalho 2
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  <span data-feather="chevron-right"></span>
+                  Trabalho 3 <span class="sr-only">(current)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+    <div class="form">
+      
+      <div class="campo">
+        <label for="tamanhoPop">tamanho da população: </label>
+        <input
+          type="number"
+          name="tamanhoPop"
+          id="tamanhoPop"
+          value="10"
+          placeholder="tamanho da população"
+        />
+      </div>
+      <div class="campo">
+        <label for="probCruzamento">Prob de cruzamento (%)</label>
+        <input
+          type="number"
+          name="probCruzamento"
+          id="probCruzamento"
+          value="95"
+          placeholder="Prob de cruzamento"
+        />
+      </div>
+      <div class="campo">
+        <label for="tipoCruzamento">Tipo de cruzamento</label>
+
+        <select name="tipoCruzamento" id="tipoCruzamento">
+          <option value="1">RADCLIFF</option>
+          <option value="2">WRIGHT</option>
+        </select>
+      </div>
+
+
+      <div class="campo">
+        <label for="probMutacao">Prob de Mutação (%)</label>
+        <input
+          type="number"
+          name="probMutacao"
+          id="probMutacao"
+          value="10"
+          placeholder="Prob de Mutação"
+        />
+      </div>
+      <div class="campo">
+        <label for="qtGeracoes">Qt. de gerações</label>
+        <input
+          type="number"
+          name="qtGeracoes"
+          id="qtGeracoes"
+          value="10"
+          placeholder="Qt. de gerações"
+        />
+      </div>
+      <div class="campo">
+        <label for="tipo">Tipo de seleção</label>
+
+        <select name="tipo" id="tipo">
+          <option value="1">Roleta</option>
+          <option value="2">Torneio</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="tamanhoTorneio">Tamanho do torneio</label>
+        <input
+          type="number"
+          name="tamanhoTorneio"
+          id="tamanhoTorneio"
+          value="4"
+          placeholder="Tamanho do torneio"
+        />
+      </div>
+
+      <div class="campo">
+        <label for="tamanhoElitismo">Tamanho do elitismo</label>
+        <input
+          type="number"
+          name="tamanhoElitismo"
+          id="tamanhoElitismo"
+          value="0"
+          placeholder="Tamanho do elitismo"
+        />
+      </div>
+    </div>
+    <button onclick="botaoClicado()">Go!</button>
+
+    <div class="navbar"><span>Resultado em gráfico</span></div>
+    <div class="wrapper">
+      <div id="chart"></div>
+    </div>
+    <div id="log"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

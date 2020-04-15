@@ -56,14 +56,16 @@ const tabelaCidades = [
   [
     "Conceição das Alagoas",
     "Concei%C3%A7%C3%A3o+das+Alagoas,+MG,+38120-000",
-    { lat: -19.923372, lng: -48.381298 }
+    { lat: -19.921688, lng: -48.381188 }
   ],
+
+
   [
     "Campo Florido",
     "Campo+Florido,+State+of+Minas+Gerais",
     { lat: -19.759827, lng: -48.571527 }
   ],
-  ["Perdizes", "Perdizes,+MG,+38170-000", { lat: -19.633443, lng: -47.300304 }],
+  ["Perdizes", "Perdizes,+MG,+38170-000", { lat: -19.342796, lng: -47.296824 }],
   ["Santa Juliana", "Santa+Juliana,+MG", { lat: -19.311119, lng: -47.532735 }],
   [
     "Nova Ponte",
