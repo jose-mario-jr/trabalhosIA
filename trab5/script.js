@@ -282,7 +282,7 @@ function botaoClicado() {
   }
   add += `<br />`
 
-  menorGlobal = -11.07961
+  menorGlobal = -11.0796
   let melhorIndividuo = elitismo(population, 1)[0]
   melhorIndividuo.geracaoEncontrado = 0
   melhorIndividuo.erro = -(menorGlobal - melhorIndividuo.aptidao) / menorGlobal
