@@ -282,26 +282,27 @@ function botaoClicado() {
   }
   add += `<br />`
 
-  maiorGlobal = 100
-  var melhorIndividuo = elitismo(population, 1)[0]
+  menorGlobal = -11.07961
+  let melhorIndividuo = elitismo(population, 1)[0]
   melhorIndividuo.geracaoEncontrado = 0
-  melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
-
+  melhorIndividuo.erro = -(menorGlobal - melhorIndividuo.aptidao) / menorGlobal
+  let melhoresIndividuos = [melhorIndividuo]
   acumuladorPlot = []
   acumuladorPlot.push(getData(population, 0))
-  plot(acumuladorPlot)
 
   for (let cont = 1; cont < qtGeracoes; cont++) {
-    var best = []
+    let best = []
 
     // elitismo nesta parte!
-    var elite = elitismo(population, tamanhoElitismo)
-    var melhorAgora = elitismo(population, 1)[0]
+    let elite = elitismo(population, tamanhoElitismo)
+    let melhorAgora = elitismo(population, 1)[0]
 
     if (melhorAgora.aptidao > melhorIndividuo.aptidao) {
       melhorIndividuo = melhorAgora
       melhorIndividuo.geracaoEncontrado = cont
-      melhorIndividuo.erro = melhorIndividuo.aptidao / maiorGlobal
+      melhorIndividuo.erro =
+        -(menorGlobal - melhorIndividuo.aptidao) / menorGlobal
+      melhoresIndividuos.push(melhorIndividuo)
     }
     if (tipo == 1) {
       // seleciona melhores por roleta
@@ -343,7 +344,7 @@ function botaoClicado() {
     }
     add += `<br />`
   }
-  plot(acumuladorPlot)
+  plot(acumuladorPlot, melhoresIndividuos)
   add += `populacao resultante: <br />`
   for (let k = 0; k < population.length; k++) {
     add += `${population[k].x}, ${population[k].y} -> ${population[k].aptidao} <br/>`
@@ -358,7 +359,7 @@ function botaoClicado() {
 }
 
 // plota no grafico
-function plot(acumuladorPlot) {
+function plot(acumuladorPlot, melhoresIndividuos) {
   var data = []
   for (var a = 0; a < acumuladorPlot.length; a++) {
     data.push({
@@ -369,8 +370,25 @@ function plot(acumuladorPlot) {
       y: acumuladorPlot[a].dados[1],
       z: acumuladorPlot[a].dados[2],
       mode: "markers",
+      marker: {
+        size: 8,
+      },
     })
   }
+
+  data.push({
+    opacity: 0.9,
+    type: "scatter3d",
+    name: `Melhores Individuos`,
+    x: melhoresIndividuos.map((e) => e.x),
+    y: melhoresIndividuos.map((e) => e.y),
+    z: melhoresIndividuos.map((e) => -e.aptidao),
+    mode: "markers",
+    marker: {
+      size: 10,
+    },
+  })
+
   var layout = {
     scene: {
       xaxis: { range: [-10, 12] },
