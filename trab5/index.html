@@ -2,14 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Trabalho 5 -> mínimo local com AG e Cromossomos Reais</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Trabalho 5 - Mínimo local com AG e Cromossomos Reais</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-1.5.0.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.js" charset="utf-8"></script>
-
-	<!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -17,8 +18,8 @@
       crossorigin="anonymous"
     />
     <meta name="theme-color" content="#563d7c" />
-	
-	<style>
+
+    <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -34,10 +35,10 @@
         }
       }
     </style>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../estilo.css" />
   </head>
   <body>
-	<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"
         >Inteligência Artificial - Engenharia de Computação</a
       >
@@ -53,115 +54,163 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link" href="../trab2">
                   <span data-feather="chevron-right"></span>
                   Trabalho 2
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link" href="../trab3">
                   <span data-feather="chevron-right"></span>
-                  Trabalho 3 <span class="sr-only">(current)</span>
+                  Trabalho 3
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="../trab4/">
+                  <span data-feather="chevron-right"></span>
+                  Trabalho 4
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="../trab5/">
+                  <span data-feather="chevron-right"></span>
+                  Trabalho 5
                 </a>
               </li>
             </ul>
           </div>
         </nav>
-
-    <div class="form">
-      
-      <div class="campo">
-        <label for="tamanhoPop">tamanho da população: </label>
-        <input
-          type="number"
-          name="tamanhoPop"
-          id="tamanhoPop"
-          value="10"
-          placeholder="tamanho da população"
-        />
-      </div>
-      <div class="campo">
-        <label for="probCruzamento">Prob de cruzamento (%)</label>
-        <input
-          type="number"
-          name="probCruzamento"
-          id="probCruzamento"
-          value="95"
-          placeholder="Prob de cruzamento"
-        />
-      </div>
-      <div class="campo">
-        <label for="tipoCruzamento">Tipo de cruzamento</label>
-
-        <select name="tipoCruzamento" id="tipoCruzamento">
-          <option value="1">RADCLIFF</option>
-          <option value="2">WRIGHT</option>
-        </select>
-      </div>
-
-
-      <div class="campo">
-        <label for="probMutacao">Prob de Mutação (%)</label>
-        <input
-          type="number"
-          name="probMutacao"
-          id="probMutacao"
-          value="10"
-          placeholder="Prob de Mutação"
-        />
-      </div>
-      <div class="campo">
-        <label for="qtGeracoes">Qt. de gerações</label>
-        <input
-          type="number"
-          name="qtGeracoes"
-          id="qtGeracoes"
-          value="10"
-          placeholder="Qt. de gerações"
-        />
-      </div>
-      <div class="campo">
-        <label for="tipo">Tipo de seleção</label>
-
-        <select name="tipo" id="tipo">
-          <option value="1">Roleta</option>
-          <option value="2">Torneio</option>
-        </select>
-      </div>
-
-      <div class="campo">
-        <label for="tamanhoTorneio">Tamanho do torneio</label>
-        <input
-          type="number"
-          name="tamanhoTorneio"
-          id="tamanhoTorneio"
-          value="4"
-          placeholder="Tamanho do torneio"
-        />
-      </div>
-
-      <div class="campo">
-        <label for="tamanhoElitismo">Tamanho do elitismo</label>
-        <input
-          type="number"
-          name="tamanhoElitismo"
-          id="tamanhoElitismo"
-          value="0"
-          placeholder="Tamanho do elitismo"
-        />
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <h1 class="pt-3">Parâmetros</h1>
+          <div class="form">
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="tamanhoPop">Tamanho da População</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="tamanhoPop"
+                  value="10"
+                  name="tamanhoPop"
+                />
+              </div>
+              <div class="form-group col-md-3">
+                <label for="probCruzamento"
+                  >Probabilidade de Cruzamento (%)</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="probCruzamento"
+                  value="95"
+                  name="probCruzamento"
+                />
+              </div>
+              <div class="form-group col-md-3">
+                <label for="probMutacao">Probabilidade de Mutação (%)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="probMutacao"
+                  value="10"
+                  name="probMutacao"
+                />
+              </div>
+              <div class="form-group col-md-3">
+                <label for="tamanhoElitismo">Tamanho do Elitismo</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="tamanhoElitismo"
+                  value="1"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="tipoCruzamento">Tipo de Cruzamento</label>
+                <select
+                  id="tipoCruzamento"
+                  name="tipoCruzamento"
+                  class="form-control"
+                >
+                  <option value="1">RADCLIFF</option>
+                  <option value="2">WRIGHT</option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="qtGeracoes">Qt. de Gerações</label>
+                <input
+                  class="form-control"
+                  type="number"
+                  name="qtGeracoes"
+                  id="qtGeracoes"
+                  value="10"
+                />
+              </div>
+              <div class="form-group col-md-3">
+                <label for="tipo">Tipo de Seleção</label>
+                <select id="tipo" name="tipo" class="form-control">
+                  <option value="1" selected>Roleta</option>
+                  <option value="2">Torneio</option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="tamanhoTorneio">Tamanho do Torneio</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="tamanhoTorneio"
+                  value="4"
+                />
+              </div>
+              <div class="form-group col-md-2">
+                <label for="tamanhoElitismo">Tamanho do Elitismo</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="tamanhoElitismo"
+                  id="tamanhoElitismo"
+                  value="0"
+                />
+              </div>
+            </div>
+            <button
+              id="submit"
+              onclick="botaoClicado()"
+              class="btn btn-primary"
+            >
+              Calcular
+            </button>
+          </div>
+          <h2 class="pt-5">Resultados em gráfico</h2>
+          <div class="wrapper">
+            <div id="chart"></div>
+          </div>
+          <div class="wrapper">
+            <div id="chartMelhores"></div>
+          </div>
+          <div class="text-nowrap" id="log"></div>
+        </main>
       </div>
     </div>
-    <button onclick="botaoClicado()">Go!</button>
-
-    <div class="navbar"><span>Resultado em gráfico</span></div>
-    <div class="wrapper">
-      <div id="chart"></div>
-    </div>
-    <div class="wrapper">
-      <div id="chartMelhores"></div>
-    </div>
-    <div id="log"></div>
-
     <script src="script.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
   </body>
 </html>
