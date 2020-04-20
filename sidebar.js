@@ -34,10 +34,12 @@ class SideBar extends HTMLElement {
   }
 
   connectedCallback() {
-    const links = this.querySelectorAll(".nav-link")
-    const trab = this.getAttribute("trab")
+    if (this.getAttribute("trab")) {
+      const links = this.querySelectorAll(".nav-link")
+      const trab = this.getAttribute("trab")
 
-    links[trab-2].classList.add('active')
+      links[trab - 2].classList.add("active")
+    }
   }
 }
 
