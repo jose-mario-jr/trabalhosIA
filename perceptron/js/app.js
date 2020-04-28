@@ -2,11 +2,12 @@ function random(a) {
   return Math.random() - 0.5
 }
 
-function sumList(m1, m2) {
-  sum = 0
+function sumMultList(m1, m2) {
+  let sum = 0
   for (let i = 0; i < m1.length; i++) {
     sum += m1[i] * m2[i]
   }
+  return sum
 }
 
 const x = [
@@ -22,7 +23,8 @@ const entradas = x[0].length
 const limiar = 0
 const alfa = 0.1
 
-let v = Array(entradas).fill(0) //v
+// let v = Array.from(new Array(1), _ => Array(entradas).fill(0))
+let v = Array(entradas).fill(0)
 let vAnterior = Array(entradas).fill(0) //vanterior
 
 let yIn = Array(amostras).fill(0) //yin
@@ -40,7 +42,7 @@ while (test == 1) {
   let cont = 0
 
   for (let i = 0; i < amostras; i++) {
-    yIn[i] = sumList(x[i], v) + v0
+    yIn[i] = sumMultList(x[i], v) + v0
     if (yIn[i] >= limiar) y[i] = 1
     else y[i] = -1
     if (y[i] == t[i]) cont++
@@ -54,11 +56,10 @@ while (test == 1) {
   }
   ciclo++
 
-  console.log({ ciclo })
-  console.log({ v }, { v })
-  console.log({ cont })
-  if (cont == amostras || ciclo > 100) test = 0
+  console.log("Ciclo: " + ciclo)
+  console.log(cont)
+  if (cont == amostras) test = 0
 }
 
-console.log({ v })
-console.log({ v0 })
+console.log(v)
+console.log(v0)
