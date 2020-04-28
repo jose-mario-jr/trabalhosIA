@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redes Perceptron</title>
+
+    <style>
+      #myDiv {
+        width: 700px;
+        height: 700px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="log"></div>
+    <div id="myDiv"></div>
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+    <script src="app.js"></script>
+
+    <script>
+      //caso usar json para conseguir os dados
+      async function getText() {
+        const response = await fetch("dados.json")
+        matriz = await response.json()
+        console.log(matriz)
+      }
+    </script>
+  </body>
+</html>
