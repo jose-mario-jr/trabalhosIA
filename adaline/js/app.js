@@ -63,48 +63,93 @@ const alfa = 0.01
 const erroTolerado = 0.1
 
 let v = Array.from(new Array(entradas), () =>
-  Array(numClasses).fill(random(-0.1, 0.1))
+  Array.from(new Array(numClasses), () => random(-0.1, 0.1))
 )
-let v0 = Array(numClasses).fill(random(-0.1, 0.1))
-console.log(v, v0)
-/*
-let v = Array(entradas).fill(0)
-let vAnterior = Array(entradas).fill(0) //vanterior
+let vAnterior = Array.from(new Array(entradas), () =>
+  Array.from(new Array(numClasses), () => 0)
+)
 
-let yIn = Array(amostras).fill(0) //yin
-let y = Array(amostras).fill(0) //
+let v0 = Array.from(new Array(numClasses), () => random(-0.1, 0.1))
 
-v = v.map((v) => {
-  return random()
-})
-let v0 = random() //v0
-let v0Anterior = 0
+let vetor1 = []
+let vetor2 = []
+
+let yIn = Array(numClasses).fill(0)
+let y = Array(numClasses).fill(0)
 
 let log = ""
-let test = 1
+let erro = 10
 let ciclo = 0
-while (test == 1) {
-  let cont = 0
 
+while (erro > erroTolerado) {
+  ciclo++
+  erro = 0
   for (let i = 0; i < amostras; i++) {
-    yIn[i] = sumMultList(x[i], v) + v0
-    if (yIn[i] >= limiar) y[i] = 1
-    else y[i] = -1
-    if (y[i] == t[i]) cont++
+    xAux = x[i]
+
+    for (let m = 0; m < numClasses; m++) {
+      let soma = 0
+      for (let n = 0; n < entradas; n++) {
+        soma = soma + xAux[n] * v[n][m]
+      }
+      yIn[m] = soma + v0[m]
+    }
+
+    y = yIn.map((e) => (e >= limiar ? 1 : -1))
+
+    for (let j = 0; j < numClasses; j++) {
+      erro = erro + 0.5 * (t[j][i] - y[j]) ** 2
+    }
 
     vAnterior = v
-    for (let j = 0; j < entradas; j++) {
-      v[j] = vAnterior[j] + alfa * (t[i] - y[i]) * x[i][j]
+
+    for (let m = 0; m < entradas; m++) {
+      for (let n = 0; n < numClasses; n++) {
+        v[m][n] = vAnterior[m][n] + alfa * (t[n][i] - y[n]) * xAux[m]
+      }
     }
     v0Anterior = v0
-    v0 = v0Anterior + alfa * (t[i] - y[i])
+    for (let j = 0; j < numClasses; j++) {
+      v0[j] = v0Anterior[j] + alfa * (t[j][i] - y[j])
+    }
   }
-  ciclo++
-  console.log("Ciclo: " + ciclo)
-  console.log(cont)
-  if (cont == amostras) test = 0
+  vetor1.push(ciclo)
+  vetor2.push(erro)
+  console.log("plot chamado: ", vetor1, vetor2)
+  if (ciclo > 50) break
+  // plot(vetor1, vetor2)
 }
+plot(vetor1, vetor2)
 
+function plot(v1, v2) {
+  const tr = {
+    x: v1,
+    y: v2,
+    mode: "markers",
+    type: "scatter",
+    name: "Pontos temporarios",
+  }
+  const data = [tr]
+
+  const layout = {
+    xaxis: {
+      range: [-1.5, 1.5],
+      title: {
+        text: "ciclo",
+      },
+    },
+    yaxis: {
+      range: [-1.5, 1.5],
+      title: {
+        text: "erro",
+      },
+    },
+  }
+
+  document.querySelector("#log").innerHTML = log
+  Plotly.newPlot("myDiv", data, layout)
+}
+/*
 log += "Ciclos: " + ciclo + "<br />"
 
 log += "Vetor de pesos: " + v.reduce((acc, e) => `${acc}, ${e}`) + "<br />"
