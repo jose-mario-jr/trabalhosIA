@@ -1,0 +1,47 @@
+#myDiv {
+  width: 500px;
+  height: 500px;
+}
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+.digitos-teste {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: 125px;
+}
+
+.chk {
+  margin: 0;
+}
+.chk input {
+  display: none;
+}
+
+.chk span {
+  width: 35px;
+  height: 35px;
+  display: block;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.chk input:checked + span {
+  background-color: #03c;
+}
+
+.botaoResetaGrid {
+  margin-top: 5px;
+}

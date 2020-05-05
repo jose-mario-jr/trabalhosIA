@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trabalho 6 - Adaline</title>
+
+    <!-- Bootstrap core CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <meta name="theme-color" content="#563d7c" />
+
+    <link rel="stylesheet" href="../estilo.css" />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"
+        >Inteligência Artificial - Engenharia de Computação</a
+      >
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="#">Sobre</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <side-bar trab="6"></side-bar>
+          </div>
+        </nav>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <h1 class="pt-3">Parâmetros</h1>
+          <div class="form">
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="taxaAprendizagem">Taxa de Aprendizagem</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="taxaAprendizagem"
+                  value="0.01"
+                  name="taxaAprendizagem"
+                />
+              </div>
+              <div class="form-group col-md-3">
+                <label for="tipoCriterio">Tipo de critério de parada</label>
+                <select
+                  id="tipoCriterio"
+                  name="tipoCriterio"
+                  class="form-control"
+                >
+                  <option value="1">Nº de Ciclos</option>
+                  <option value="2">Erro Tolerado</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="valorCriterio">Valor de critério de parada</label>
+
+                <input
+                  type="number"
+                  id="valorCriterio"
+                  name="valorCriterio"
+                  class="form-control"
+                  value="10"
+                />
+              </div>
+            </div>
+            <button id="botaoTreinar" class="btn btn-primary">
+              Realizar treinamento
+            </button>
+          </div>
+
+          <div id="concluido" hidden>
+            <h1>Treinamento Concluído!</h1>
+
+            <h1 class="pt-3">Parâmetros para teste</h1>
+            <div class="form">
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label>Desenhe o dígito para teste: </label>
+                  <div id="digitosTeste" class="digitos-teste"></div>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="botaoTestar">&nbsp;</label>
+
+                  <button
+                    id="botaoTestar"
+                    name="botaoTestar"
+                    class="form-control btn btn-primary"
+                  >
+                    Identificar Valor
+                  </button>
+                  <button
+                    id="botaoResetaGrid"
+                    name="botaoResetaGrid"
+                    class="form-control btn btn-secondary botaoResetaGrid"
+                  >
+                    Resetar grid!
+                  </button>
+                </div>
+                <div class="form-group col-md-3">
+                  <label>&nbsp;</label>
+
+                  <h2>Valor Previsto:</h2>
+                </div>
+                <div class="form-group col-md-1">
+                  <label>&nbsp;</label>
+
+                  <div id="valorPrevisto"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h2 class="pt-5">Resultados em gráfico</h2>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="wrapper">
+                <div id="myDiv"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="text-nowrap" id="log"></div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script defer type="module" src="../sidebar.js"></script>
+
+    <script defer src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script defer type="module" src="app.js"></script>
+  </body>
+</html>

@@ -24,6 +24,12 @@ const template = `
         Trabalho 5
       </a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="../trab6/">
+        <span data-feather="chevron-right"></span>
+        Trabalho 6
+      </a>
+    </li>
   </ul>
 `
 
