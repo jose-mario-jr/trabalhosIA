@@ -41,17 +41,18 @@ const x = [
 ]
 
 const t = [
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+  [-1, 1, -1, -1, -1, -1, -1, -1, -1, -1],
+  [-1, -1, 1, -1, -1, -1, -1, -1, -1, -1],
+  [-1, -1, -1, 1, -1, -1, -1, -1, -1, -1],
+  [-1, -1, -1, -1, 1, -1, -1, -1, -1, -1],
+  [-1, -1, -1, -1, -1, 1, -1, -1, -1, -1],
+  [-1, -1, -1, -1, -1, -1, 1, -1, -1, -1],
+  [-1, -1, -1, -1, -1, -1, -1, 1, -1, -1],
+  [-1, -1, -1, -1, -1, -1, -1, -1, 1, -1],
+  [-1, -1, -1, -1, -1, -1, -1, -1, -1, 1],
 ]
+
 const amostras = x.length
 const entradas = x[0].length
 
@@ -115,17 +116,27 @@ while (erro > erroTolerado) {
   }
   vetor1.push(ciclo)
   vetor2.push(erro)
-  console.log("plot chamado: ", vetor1, vetor2)
   if (ciclo > 50) break
   // plot(vetor1, vetor2)
 }
 plot(vetor1, vetor2)
 
+document.querySelector("#concluido").innerHTML =
+  "<h1> Treinamento Concluído! </h1>"
+log += "Ciclos: " + ciclo + "<br />"
+
+log +=
+  "Vetor de pesos: [" +
+  v.map((e) => `<br /> &emsp; &nbsp;  [ ${e.map((e) => e.toFixed(2))}]`) +
+  "<br /> ]"
+log += "<br /> Bias final: " + v0.map((e) => e.toFixed(2))
+document.querySelector("#log").innerHTML = log
+
 function plot(v1, v2) {
   const tr = {
     x: v1,
     y: v2,
-    mode: "markers",
+    mode: "lines+markers",
     type: "scatter",
     name: "Pontos temporarios",
   }
@@ -133,73 +144,32 @@ function plot(v1, v2) {
 
   const layout = {
     xaxis: {
-      range: [-1.5, 1.5],
+      // range: [-1.5, 1.5],
       title: {
         text: "ciclo",
       },
     },
     yaxis: {
-      range: [-1.5, 1.5],
+      // range: [-1.5, 1.5],
       title: {
         text: "erro",
       },
     },
   }
 
-  document.querySelector("#log").innerHTML = log
   Plotly.newPlot("myDiv", data, layout)
 }
-/*
-log += "Ciclos: " + ciclo + "<br />"
 
-log += "Vetor de pesos: " + v.reduce((acc, e) => `${acc}, ${e}`) + "<br />"
-log += "Bias final: " + v0
-console.log(v)
-console.log(v0)
-
-// let teste = multiplyMatrices(x, v)
-// let yfinal = Array(amostras).fill(0)
-// let vetor = Array(amostras).fill(1)
-// let yaux = teste.map((e, i) => {
-//   return e + v0 * vetor[i]
-// })
-
-// y = yaux.map((e) => {
-//   return e >= limiar ? 1 : -1
-// })
-
-// console.log(y)
-
-let vx = Array.from(new Array(200), (e, i) => (i * 4) / 200 - 2)
-let vy = Array(200).fill(0)
-
-vy = vy.map((e, i) => -(v0 + v[0] * vx[i]) / v[1])
-
-const trace1 = {
-  x: [1, 1, -1, -1],
-  y: [1, -1, 1, -1],
-  mode: "markers",
-  type: "scatter",
-  name: "Pontos de teste",
+function teste() {
+  xTeste = x[6] // uma amostra
+  for (let i = 0; i < numClasses; i++) {
+    let soma = 0
+    for (let j = 0; j < entradas; j++) {
+      soma += xTeste[j] * v[j][i]
+      yIn[i] = soma + v0[i]
+    }
+  }
+  console.log(yIn)
+  let y = yIn.map((e) => (e >= limiar ? 1 : -1))
+  console.log(y)
 }
-const trace2 = {
-  x: vx,
-  y: vy,
-  mode: "lines",
-  type: "scatter",
-  name: "Reta resultante",
-}
-const data = [trace1, trace2]
-
-const layout = {
-  xaxis: {
-    range: [-1.5, 1.5],
-  },
-  yaxis: {
-    range: [-1.5, 1.5],
-  },
-}
-
-document.querySelector("#log").innerHTML = log
-Plotly.newPlot("myDiv", data, layout)
-*/
