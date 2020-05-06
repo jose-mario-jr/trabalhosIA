@@ -1,5 +1,14 @@
 import Dados from "./dados.js"
 
+const x = Dados.x
+const t = Dados.t
+
+const amostras = x.length
+const entradas = x[0].length
+const numClasses = t.length
+const targets = t[0].length
+const limiar = 0
+
 function random(a, b) {
   return Math.random() * (b - a) + a
 }
@@ -27,32 +36,25 @@ function multiplyMatrices(m1, m2) {
   return result
 }
 
-const x = Dados.x
-const t = Dados.t
-
-const amostras = x.length
-const entradas = x[0].length
-const numClasses = t.length
-const targets = t[0].length
-
-const limiar = 0
-
-let v = Array.from(new Array(entradas), () =>
-  Array.from(new Array(numClasses), () => random(-0.1, 0.1))
-)
-let vAnterior = Array.from(new Array(entradas), () =>
-  Array.from(new Array(numClasses), () => 0)
-)
-
-let v0 = Array.from(new Array(numClasses), () => random(-0.1, 0.1))
-
-let vetor1 = []
-let vetor2 = []
-
-let yIn = Array(numClasses).fill(0)
-let y = Array(numClasses).fill(0)
-
+let v,
+  yIn,
+  v0 = []
 document.querySelector("#botaoTreinar").onclick = () => {
+  v = Array.from(new Array(entradas), () =>
+    Array.from(new Array(numClasses), () => random(-0.1, 0.1))
+  )
+  let vAnterior = Array.from(new Array(entradas), () =>
+    Array.from(new Array(numClasses), () => 0)
+  )
+
+  v0 = Array.from(new Array(numClasses), () => random(-0.1, 0.1))
+
+  let vetor1 = []
+  let vetor2 = []
+
+  yIn = Array(numClasses).fill(0)
+  let y = Array(numClasses).fill(0)
+
   const alfa = parseFloat(document.querySelector("#taxaAprendizagem").value)
   const tipoCriterio = parseInt(document.querySelector("#tipoCriterio").value)
   const valorCriterio = parseFloat(
@@ -114,6 +116,9 @@ document.querySelector("#botaoTreinar").onclick = () => {
     "<br /> ]"
   log += "<br /> Bias final: " + v0.map((e) => e.toFixed(2))
   document.querySelector("#log").innerHTML = log
+
+  console.log(entradas)
+  inicializaDigitosTeste()
 }
 
 function plot(v1, v2) {
@@ -190,8 +195,6 @@ function inicializaDigitosTeste() {
 
   document.querySelector("#digitosTeste").innerHTML = conteudoDigitosTeste
 }
-
-inicializaDigitosTeste()
 
 document.querySelector("#botaoResetaGrid").onclick = () =>
   inicializaDigitosTeste()

@@ -45,3 +45,8 @@
 .botaoResetaGrid {
   margin-top: 5px;
 }
+
+#concluido h1:first-child {
+  margin-top: 20px;
+  text-align: center;
+}
