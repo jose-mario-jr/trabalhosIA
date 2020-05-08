@@ -69,7 +69,6 @@ document.querySelector("#botaoTreinar").onclick = () => {
 
   while (ciclo < maximoCiclos && erro > erroTolerado) {
     ciclo++
-    console.log(erro)
     erro = 0
     for (let i = 0; i < amostras; i++) {
       let xAux = x[i]
@@ -102,8 +101,6 @@ document.querySelector("#botaoTreinar").onclick = () => {
     }
     vetor1.push(ciclo)
     vetor2.push(erro)
-    if (ciclo > 50) break
-    // plot(vetor1, vetor2)
   }
   plot(vetor1, vetor2)
 
@@ -117,7 +114,6 @@ document.querySelector("#botaoTreinar").onclick = () => {
   log += "<br /> Bias final: " + v0.map((e) => e.toFixed(2))
   document.querySelector("#log").innerHTML = log
 
-  console.log(entradas)
   inicializaDigitosTeste()
 }
 
@@ -159,7 +155,7 @@ function getDigitoTeste() {
 
 document.querySelector("#botaoTestar").onclick = () => {
   const digitoTeste = getDigitoTeste()
-  console.log(digitoTeste)
+
   for (let i = 0; i < numClasses; i++) {
     let soma = 0
     for (let j = 0; j < entradas; j++) {
