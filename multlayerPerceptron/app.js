@@ -98,7 +98,7 @@ document.querySelector("#botaoTreinar").onclick = () => {
   vNovo = new Array(neur).fill(new Array(vsai).fill(0))
   v0Novo = [new Array(vsai).fill(0)]
 
-  zin = [new Array(neur).fill(0)]
+  zIn = [new Array(neur).fill(0)]
   z = [new Array(neur).fill(0)]
 
   deltinhak = new Array(vsai).fill([0])
@@ -130,14 +130,32 @@ document.querySelector("#botaoTreinar").onclick = () => {
     erroTotal = 0
     for (let padrao = 0; padrao < amostras; padrao++) {
       for (let j = 0; j < neur; j++) {
-        z[0][j] = sumMultList(x[padrao], vAnterior[j]) + v0Anterior[0][j]
+        zIn[0][j] = sumMultList(x[padrao], vAnterior[j]) + v0Anterior[0][j]
+        console.log(z[0][j])
       }
 
-      y = yIn.map((e) => (e >= limiar ? 1 : -1))
+      z[0] = zIn[0].map((e) => Math.tanh(e))
+
+      yIn = multiplyMatrices(z, wAnterior) + w0Anterior
+
+      y = yIn[0].map((e) => Math.tanh(e))
+
+      for (let m = 0; m < vsai; m++) {
+        h[m][0] = y[0][m]
+      }
+      for (let m = 0; m < vsai; m++) {
+        target[m][0] = t[m][ordem[padrao]]
+      }
+
+      for (let m = 0; m < vsai; m++) {
+        erroTotal += 0.5 * (target[m][0] - h[m][0]) ** 2
+      }
 
       for (let j = 0; j < numClasses; j++) {
         erro = erro + 0.5 * (t[j][i] - y[j]) ** 2
       }
+
+      // video foi até aqui!
 
       vAnterior = v
 
