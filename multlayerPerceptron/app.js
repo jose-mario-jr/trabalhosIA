@@ -155,7 +155,15 @@ document.querySelector("#botaoTreinar").onclick = () => {
         erro = erro + 0.5 * (t[j][i] - y[j]) ** 2
       }
 
-      // video foi até aqui!
+      //obter matrizes para atualização dos pesos
+      for (let i = 0; i < vsai; i++) {
+        deltinhak[i] = (target[i] - h[i]) * (1 + h[i]) * (1 - h[i])
+      }
+      deltaw = alfa * multiplyMatrices(deltinhak, z)
+      deltaw0 = deltinha.map((e) => e * alfa)
+      deltinhaIn = multiplyMatrices(deltinhak, wAnterior)
+
+      // video foi até aqui (4:00 min +-)
 
       vAnterior = v
 
