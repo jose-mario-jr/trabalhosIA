@@ -44,6 +44,7 @@ ordem = ordem.astype('int')
 t = np.loadtxt('target.csv', delimiter=',', skiprows=0)
 
 print("Preparando e iniciando treinamento...")
+
 # gerando pesos sinápticos aleatoriamente
 vanterior = np.zeros((entradas, neur))
 aleatorio = 0.2
@@ -80,6 +81,8 @@ deltinha2 = np.zeros((neur, 1))
 ciclo = 0
 errototal = 100000
 
+print("Ciclo\t Erro")
+
 while errotolerado < errototal:
   errototal = 0
   for padrao in range(amostras):
@@ -107,7 +110,7 @@ while errotolerado < errototal:
     for k in range(entradas):
       xaux[0][k] = x[padrao][k]
     deltav = alfa * np.dot(deltinha2, xaux)
-    deltav0 = alfa*deltinha
+    deltav0 = alfa*deltinha2
 
     vnovo = vanterior+np.transpose(deltav)
     v0novo = v0anterior+np.transpose(deltav0)
@@ -120,7 +123,6 @@ while errotolerado < errototal:
   ciclo = ciclo+1
   listaciclo.append(ciclo)
   listaerro.append(errototal)
-  print("Ciclo\t Erro")
   print(ciclo, '\t', errototal)
 
 plt.plot(listaciclo, listaerro)
@@ -130,14 +132,13 @@ plt.show()
 
 print(t)
 os.chdir('../saidas')
-np.loadtxt('target.txt')
 
-open('target.txt', 'w').write(np.array2string(target))
-open('zin.txt', 'w').write(np.array2string(zin))
-open('vanterior.txt', 'w').write(np.array2string(vanterior))
-open('v0anterior.txt', 'w').write(np.array2string(v0anterior))
-open('wanterior.txt', 'w').write(np.array2string(wanterior))
-open('w0anterior.txt', 'w').write(np.array2string(w0anterior))
+np.savetxt('target.txt', target, delimiter=',')
+np.savetxt('zin.txt', zin, delimiter=',')
+np.savetxt('vanterior.txt', vanterior, delimiter=',')
+np.savetxt('v0anterior.txt', v0anterior, delimiter=',')
+np.savetxt('wanterior.txt', wanterior, delimiter=',')
+np.savetxt('w0anterior.txt', w0anterior, delimiter=',')
 
 # xteste = np.loadtxt('9_72.txt')
 # for m2 in range(vsai):

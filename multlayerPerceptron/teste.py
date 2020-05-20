@@ -1,3 +1,4 @@
+import os
 import numpy as np
 
 ampdigitos = 50
@@ -6,14 +7,20 @@ amostras = ampdigitos*vsai
 neur = 200
 limiar = 0.0
 
-zin = [5][5]
-vanterior = [5][5]
-v0anterior = [5][5]
-wanterior = [5][5]
-w0anterior = [5][5]
-target = [5][5]
+# ler saidas da rede.
+os.chdir('saidas')
+zin = np.loadtxt('zin.txt', delimiter=',')
+vanterior = np.loadtxt('vanterior.txt', delimiter=',')
+v0anterior = np.loadtxt('v0anterior.txt', delimiter=',')
+wanterior = np.loadtxt('wanterior.txt', delimiter=',')
+w0anterior = np.loadtxt('w0anterior.txt', delimiter=',')
+target = np.loadtxt('target.txt', delimiter=',')
 
-aminicial = 101
+os.chdir('../digitostreinamento')
+
+t = np.loadtxt('target.csv', delimiter=',', skiprows=0)
+
+aminicial = 51
 amtestedigitos = 20
 yteste = np.zeros((vsai, 1))
 cont = 0
@@ -31,6 +38,7 @@ for m in range(vsai):
     for m2 in range(vsai):
       for n2 in range(neur):
         zin[0][n2] = np.dot(xteste, vanterior[:, n2])+v0anterior[0][n2]
+
       z = np.tanh(zin)
       yin = np.dot(z, wanterior) + w0anterior
       y = np.tanh(yin)
@@ -42,7 +50,7 @@ for m in range(vsai):
     for j in range(vsai):
       yteste[j][0] = y[0][j]
     for j in range(vsai):
-      target[j][0] = y[0][j]
+      target[j][0] = t[0][j]
 
     soma = np.sum(y-target)
     if soma == 0:
