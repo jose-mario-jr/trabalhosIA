@@ -7,7 +7,7 @@ const amostras = x.length
 const entradas = x[0].length
 const numClasses = t.length
 const targets = t[0].length
-const limiar = 0
+const limiar = -0.3
 
 function random(a, b) {
   return Math.random() * (b - a) + a
@@ -165,17 +165,23 @@ document.querySelector("#botaoTestar").onclick = () => {
   }
   console.log(yIn)
 
-  let accValorPrevisto = "<h2> "
   let achou = false
+  let maiorIndice = 0
+  let maiorValor = yIn[0]
   yIn.map((e, i) => {
     if (e >= limiar) {
-      accValorPrevisto += `${i + 1}; `
+      if (e > maiorValor) {
+        maiorValor = e
+        maiorIndice = i
+      }
       achou = true
     }
   })
-  if (!achou) accValorPrevisto += "Irreconhecivel."
+  let accValorPrevisto = ""
+  if (achou) accValorPrevisto += `${(maiorIndice < 9 ? maiorIndice : -1) + 1}.`
+  else accValorPrevisto += "Irreconhecivel."
 
-  accValorPrevisto += "</h2>"
+  accValorPrevisto = "<h2> " + accValorPrevisto + "</h2>"
   document.querySelector("#valorPrevisto").innerHTML = accValorPrevisto
 }
 
