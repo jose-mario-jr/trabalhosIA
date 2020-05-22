@@ -14,10 +14,10 @@ ampdigitos = 50
 vsai = 10
 amostras = ampdigitos*vsai
 entradas = 256
-neur = 200
+neur = 10
 limiar = 0.0
 alfa = 0.001
-errotolerado = 0.5
+errotolerado = 1
 listaciclo = []
 listaerro = []
 
@@ -130,11 +130,8 @@ plt.xlabel('Ciclo')
 plt.ylabel('Erro')
 plt.show()
 
-print(t)
 os.chdir('../saidas')
 
-np.savetxt('target.txt', target, delimiter=',')
-np.savetxt('zin.txt', zin, delimiter=',')
 np.savetxt('vanterior.txt', vanterior, delimiter=',')
 np.savetxt('v0anterior.txt', v0anterior, delimiter=',')
 np.savetxt('wanterior.txt', wanterior, delimiter=',')

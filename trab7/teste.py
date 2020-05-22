@@ -3,7 +3,7 @@ import numpy as np
 
 ampdigitos = 50
 vsai = 10
-neur = 200
+neur = 20
 limiar = 0.0
 
 # ler saidas da rede.
@@ -19,7 +19,7 @@ os.chdir('../digitostreinamento')
 t = np.loadtxt('target.csv', delimiter=',', skiprows=0)
 
 aminicial = 51
-amtestedigitos = 20
+amtestedigitos = 40
 yteste = np.zeros((vsai, 1))
 amostras = ampdigitos*vsai
 cont = 0
