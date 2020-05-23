@@ -15,9 +15,9 @@ vsai = 10
 amostras = ampdigitos*vsai
 entradas = 256
 neur = 10
-limiar = 0.0
-alfa = 0.001
-errotolerado = 1
+limiar = -0.5
+alfa = 0.02
+errotolerado = 5
 listaciclo = []
 listaerro = []
 

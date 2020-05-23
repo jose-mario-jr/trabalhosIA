@@ -3,7 +3,7 @@ import numpy as np
 
 ampdigitos = 50
 vsai = 10
-neur = 20
+neur = 10
 limiar = 0.0
 
 # ler saidas da rede.
@@ -12,7 +12,6 @@ vanterior = np.loadtxt('vanterior.txt', delimiter=',')
 v0anterior = np.loadtxt('v0anterior.txt', delimiter=',')
 wanterior = np.loadtxt('wanterior.txt', delimiter=',')
 w0anterior = np.loadtxt('w0anterior.txt', delimiter=',')
-
 os.chdir('../digitostreinamento')
 # np.shape(vanterior)
 # exit()
