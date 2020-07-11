@@ -10,24 +10,40 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.metrics import confusion_matrix
 
-os.chdir("entradas")
-entrada = pd.read_csv('entrada.csv', header=None)
-saida = pd.read_csv('saida.csv', header=None)
+os.chdir('digitostreinamento')
 
-# print(type(entrada[10][10]))  # int64
-# A 1 0 0 0 ... 0
-# B 0 1 0 0 ... 0
-# C 0 0 1 0 ... 0
-labelEncoder = LabelEncoder()
-saida = labelEncoder.fit_transform(saida)
-saida_oneofclasses = np_utils.to_categorical(saida)
+t = pd.read_csv('target_keras.csv', header=None)
 
-# print(entrada)  # um vetor com todas as posicoes de acordo com o valor no alfabeto
-# print(saida_oneofclasses)  # target one of classes (igual utilizado antes)
-# exit()
+(vsai, numclasses) = np.shape(t)
+
+ampdigitos = 50
+amostras = ampdigitos*vsai
+entradas = 256
+
+x = np.zeros((amostras, entradas))
+k2 = '_'
+k4 = '.txt'
+cont = 0
+ordem = np.zeros(amostras)
+
+print("Lendo arquivos:...")
+
+for m in range(10):
+  k1 = str(m)
+  for n in range(ampdigitos):
+    k3a = n+1
+    k3 = str(k3a)
+    nome = k1+k2+k3+k4
+    entrada = np.loadtxt(nome)
+    x[cont, :] = entrada[:]
+    ordem[cont] = m
+    cont = cont+1
+ordem = ordem.astype('int')
+
+print(np.shape(x))
 
 entradas_treinamento, entradas_teste, targets_treinamento, targets_teste = train_test_split(
-    entrada, saida_oneofclasses, test_size=25)
+    x, t, test_size=25)
 
 rede = Sequential()  # mlp
 rede.add(Dense(units=30, activation='tanh', input_dim=16))
