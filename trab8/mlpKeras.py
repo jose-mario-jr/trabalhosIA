@@ -40,8 +40,6 @@ for m in range(10):
     cont = cont+1
 ordem = ordem.astype('int')
 
-print(np.shape(x))
-
 entradas_treinamento, entradas_teste, targets_treinamento, targets_teste = train_test_split(
     x, t, test_size=25)
 
