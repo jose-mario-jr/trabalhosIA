@@ -21,7 +21,8 @@ entradas = 256
 neur = 10
 limiar = -0.5
 alfa = 0.02
-errotolerado = 5
+errotolerado = 10
+max_ciclos = 50
 listaciclo = []
 listaerro = []
 
@@ -86,7 +87,7 @@ errototal = 100000
 
 print("Ciclo\t Erro")
 
-while errotolerado < errototal and ciclo < 50:
+while errotolerado < errototal and ciclo < max_ciclos:
   errototal = 0
   for padrao in range(amostras):
     for j in range(neur):

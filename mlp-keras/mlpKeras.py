@@ -23,8 +23,9 @@ saida = labelEncoder.fit_transform(saida)
 saida_oneofclasses = np_utils.to_categorical(saida)
 
 # print(entrada)  # um vetor com todas as posicoes de acordo com o valor no alfabeto
-# print(saida_oneofclasses)  # target one of classes (igual utilizado antes)
-# exit()
+# print(saida)
+print(saida_oneofclasses)  # target one of classes (igual utilizado antes)
+exit()
 
 entradas_treinamento, entradas_teste, targets_treinamento, targets_teste = train_test_split(
     entrada, saida_oneofclasses, test_size=25)
