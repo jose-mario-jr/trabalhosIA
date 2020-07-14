@@ -1,0 +1,5 @@
+dataset
+dados.npy
+saida_esperada.npy
+model-[0-9]*.model
+
